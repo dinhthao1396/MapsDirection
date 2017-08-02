@@ -38,6 +38,10 @@ class ListTypeTableViewController: UITableViewController {
         listType.append(element4)
         let element5 = ListTypeModel(name: "Museum", value: 4)
         listType.append(element5)
+        let element6 = ListTypeModel(name: "ATM", value: 5)
+        listType.append(element6)
+        let element7 = ListTypeModel(name: "Gas Station", value: 6)
+        listType.append(element7)
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
