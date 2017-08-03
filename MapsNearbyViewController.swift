@@ -87,44 +87,40 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
             
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: String(annotation.hash))
             
-            let rightButton = UIButton(type: .infoDark)
+            let rightButton = UIButton(type: .detailDisclosure)
             let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
-            rightButton.tag = annotation.hash
             pinView?.pinTintColor = UIColor.red
-            
+            pinView?.isEnabled = true
             pinView?.animatesDrop = true
             pinView?.canShowCallout = true
             pinView?.rightCalloutAccessoryView = rightButton
-//            switch dataRecevie{
-//                case 0:
-//                    url = "https://www.shareicon.net/data/512x512/2016/08/05/807064_knife_512x512.png"
-//                case 1:
-//                    url = "https://www.shareicon.net/data/512x512/2015/11/01/665295_medical_512x512.png"
-//                case 2:
-//                    url = "https://www.shareicon.net/data/512x512/2016/09/23/833197_school_512x512.png"
-//                case 3:
-//                    url = "https://www.shareicon.net/data/512x512/2016/08/19/816747_hotel_512x512.png"
-//                case 4:
-//                    url = "https://www.shareicon.net/data/512x512/2016/09/21/831298_business_512x512.png"
-//                case 5:
-//                    url = "https://www.shareicon.net/data/128x128/2016/04/25/501800_refresh_40x40.png"
-//                case 6:
-//                    url = "https://www.shareicon.net/data/512x512/2015/12/14/687106_service_512x512.png"
-//                default:
-//                    url = "https://www.shareicon.net/data/512x512/2015/12/14/687106_service_512x512.png"
-//            }
-            if listCheckBox.count == 0{
-                url = choiceUrlImage(data: dataRecevie)
-                imageView.image = UIImage(imageView.downLoadFromUrlDemoSimple(urlSimple: url))
-                pinView?.leftCalloutAccessoryView = imageView
-            }else{
-                for value in listCheckBox[0..<listCheckBox.count]{
-                    url = choiceUrlImage(data: value)
-                    imageView.image = UIImage(imageView.downLoadFromUrlDemoSimple(urlSimple: url))
-                    pinView?.leftCalloutAccessoryView = imageView
-                }
+            switch dataRecevie{
+                case 0:
+                    url = "https://www.shareicon.net/data/512x512/2016/08/05/807064_knife_512x512.png"
+                case 1:
+                    url = "https://www.shareicon.net/data/512x512/2015/11/01/665295_medical_512x512.png"
+                case 2:
+                    url = "https://www.shareicon.net/data/512x512/2016/09/23/833197_school_512x512.png"
+                case 3:
+                    url = "https://www.shareicon.net/data/512x512/2016/08/19/816747_hotel_512x512.png"
+                case 4:
+                    url = "https://www.shareicon.net/data/512x512/2016/09/21/831298_business_512x512.png"
+                case 5:
+                    url = "https://www.shareicon.net/data/128x128/2016/04/25/501800_refresh_40x40.png"
+                case 6:
+                    url = "https://www.shareicon.net/data/512x512/2015/12/14/687106_service_512x512.png"
+                default:
+                    url = "https://www.shareicon.net/data/512x512/2015/12/14/687106_service_512x512.png"
             }
-            //url = choiceIconToShow(listChoice: listCheckBox, dataRecevie: dataRecevie)
+//            if listCheckBox.count == 0{
+//                url = choiceUrlImage(data: dataRecevie)
+//            }else{
+//                for value in listCheckBox[0..<listCheckBox.count]{
+//                    url = choiceUrlImage(data: value)
+//                }
+//            }
+            imageView.image = UIImage(imageView.downLoadFromUrlDemoSimple(urlSimple: url))
+            pinView?.leftCalloutAccessoryView = imageView
             
             
             return pinView
@@ -203,7 +199,7 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         default:
             urlChoice = "https://www.shareicon.net/data/512x512/2015/12/14/687106_service_512x512.png"
         }
-        print(urlChoice)
+        //print(urlChoice)
         return urlChoice
     }
     
@@ -320,14 +316,19 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
             }
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        
         if control == view.rightCalloutAccessoryView {
-        makeChoice(title: "More Details")
-        titlePinLocation = (view.annotation?.title!)!
-        subtitlePinLocation = (view.annotation?.subtitle!)!
-        latPinLocation = String(describing: (view.annotation?.coordinate.latitude)!)
-        lngPinLocation = String(describing: (view.annotation?.coordinate.longitude)!)
-        latDirection = Double((view.annotation?.coordinate.latitude)!)
-        lngDirection = Double((view.annotation?.coordinate.longitude)!)
+            makeChoice(title: "More Details")
+            titlePinLocation = (view.annotation?.title!)!
+            subtitlePinLocation = (view.annotation?.subtitle!)!
+            latPinLocation = String(describing: (view.annotation?.coordinate.latitude)!)
+            lngPinLocation = String(describing: (view.annotation?.coordinate.longitude)!)
+            latDirection = Double((view.annotation?.coordinate.latitude)!)
+            lngDirection = Double((view.annotation?.coordinate.longitude)!)
+            print("Button right was tapped")
+        }
+        if control == view.leftCalloutAccessoryView {
+            print("User press at image")
         }
     }
     

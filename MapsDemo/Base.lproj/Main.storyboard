@@ -48,8 +48,11 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5pC-ki-rPz">
+                                        <button opaque="NO" contentMode="scaleAspectFit" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5pC-ki-rPz">
                                             <rect key="frame" x="263" y="16" width="20" height="20"/>
+                                            <accessibility key="accessibilityConfiguration">
+                                                <accessibilityTraits key="traits" button="YES" image="YES" selected="YES" updatesFrequently="YES" adjustable="YES"/>
+                                            </accessibility>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="20" id="ABc-NL-rxf"/>
                                                 <constraint firstAttribute="height" constant="20" id="xtB-7e-5MK"/>
@@ -90,13 +93,13 @@
                     </tableView>
                     <navigationItem key="navigationItem" id="rQX-3g-CR3"/>
                     <connections>
-                        <outlet property="listTypeView" destination="1HV-bh-DAA" id="E2K-Pk-Ogj"/>
+                        <outlet property="listTypeView" destination="1HV-bh-DAA" id="K5F-5g-uFi"/>
                         <segue destination="kl7-be-XVe" kind="show" identifier="showChoice" id="bpn-gB-IVM"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="txh-7R-QtC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-55.200000000000003" y="-475.41229385307349"/>
+            <point key="canvasLocation" x="9" y="-475"/>
         </scene>
         <!--Direction View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -382,7 +385,7 @@
         <image name="uncheckbox12" width="12" height="12"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="bpn-gB-IVM"/>
+        <segue reference="EZK-F2-9GY"/>
         <segue reference="25R-PN-h1G"/>
     </inferredMetricsTieBreakers>
 </document>

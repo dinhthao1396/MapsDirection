@@ -27,6 +27,9 @@ class ListTypeTableViewCell: UITableViewCell {
     }
     func setDataForCellType(name: String){
         self.nameType.text = name
+        self.checkBox.setBackgroundImage(UIImage(named: "uncheckbox12"), for: UIControlState.normal)
+        self.checkBox.isSelected = true
+        
         
     }
 

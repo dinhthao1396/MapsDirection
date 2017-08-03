@@ -15,30 +15,51 @@ class ListTypeTableViewController: UITableViewController {
     var dataToSendViaListButton = Int()
     var dataToSend = Int()
     var listCheckBox = [Int]()
-    
+    var isCheckBox = false
+    var dataFromButtonCheck  = Int()
  
     @IBOutlet var listTypeView: UITableView!
+    
     @IBAction func clickToCheck(_ sender: UIButton) {
+        dataFromButtonCheck = sender.tag
+        
         if (sender.isSelected == true){
+            var sum = 0
             sender.setBackgroundImage(UIImage(named: "checkbox12"), for: UIControlState.normal)
-            let dataFromButtonCheck = sender.tag
-//            for value in listCheckBox[0..<listCheckBox.count]{
-//                if value == dataFromButtonCheck{
-//                    print("Don't append")
-//                }
-//                else{
-//                    
-//                }
-//            }
-            listCheckBox.append(dataFromButtonCheck)
+            if listCheckBox.count == 0 {
+                listCheckBox.append(dataFromButtonCheck)
+            }
+            else{
+                for value in listCheckBox[0..<listCheckBox.count]{
+                    if value == dataFromButtonCheck {
+                        sum = sum + 1
+                        //listCheckBox.append(dataFromButtonCheck)
+                    }
+                }
+                if sum == 0{
+                    listCheckBox.append(dataFromButtonCheck)
+                }
+            }
             print("User choice \(sender.tag)")
             sender.isSelected = false
         }else{
+            var sum = 0
             sender.setBackgroundImage(UIImage(named: "uncheckbox12"), for: UIControlState.normal)
-            sender.isSelected = true
+            if listCheckBox.count > 0 {
+                for i in 0..<listCheckBox.count {
+                    if dataFromButtonCheck == listCheckBox[i] {
+                        sum = sum + i
+                    }
+                    
+                }
+                listCheckBox.remove(at: sum)
+            }
+            sender.isSelected = true //Background
         }
+        print(listCheckBox.count)
     }
-
+    
+ 
     
     @IBAction func listButton(_ sender: UIButton) {
         dataToSendViaListButton = sender.tag
@@ -66,6 +87,8 @@ class ListTypeTableViewController: UITableViewController {
         listType.append(element7)
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Show", style: .plain, target: self, action: #selector(ListTypeTableViewController.showChoice))
+
+        
         //listButton(seder: UI)
         //clickButton.setBackgroundImage(UIImage(named: "uncheckbox12"), for: UIControlState.normal)
         // Uncomment the following line to preserve selection between presentations
@@ -74,8 +97,27 @@ class ListTypeTableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
+    
+    func testListToShow(title: String, content: String){
+        let alert = UIAlertController(title: title, message: content , preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: { (action) in
+            print("User Click Ok To Choice Again")
+        }))
+        self.present(alert, animated:  true, completion: nil)
+ 
+    }
+    
+    
     func showChoice(){
-        performSegue(withIdentifier: "showChoice", sender: self)
+        if listCheckBox.count == 0{
+            testListToShow(title: "Nothing To Show", content: "Please check some place you want to show")
+        }else{
+            performSegue(withIdentifier: "showChoice", sender: self)
+        }
+        self.listTypeView.reloadData()
+        
+
+        
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
