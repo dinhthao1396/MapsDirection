@@ -26,6 +26,16 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
     var url = ""
     var listToShow = [ModelOfDirec]()
     var annotations = [MKAnnotation]()
+    var dataToSendButtonDetails = Int()
+    var listToSendTableDetail = [ModelOfDirec]()
+
+    var latDirection = Double()
+    var lngDirection = Double()
+    var titlePinLocation = ""
+    var subtitlePinLocation = ""
+    var latPinLocation = ""
+    var lngPinLocation = ""
+    
     var count = 0 // test did animataion
     //var finalUrl = ""
     private var mapChangedFromUserInteraction = false
@@ -105,20 +115,9 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
                 default:
                     url = "https://www.shareicon.net/data/512x512/2015/12/14/687106_service_512x512.png"
             }
-           
-            
+                       
             imageView.image = UIImage(imageView.downLoadFromUrlDemoSimple(urlSimple: url))
-
-           // pinView?.image = UIImage(imageView.downLoadFromUrlDemoSimple(urlSimple: url))
-            //let imageToShow = UIImageView(image: UIImage(imageView.downLoadFromUrlDemoSimple(urlSimple: url)))
             pinView?.leftCalloutAccessoryView = imageView
-
-            // image is not load
-//            pinView!.image = UIImage(named: "icon1.png")
-//            
-//            // Add image to left callout
-//            var mugIconView = UIImageView(image: UIImage(named: "test.png"))
-//            pinView!.leftCalloutAccessoryView = mugIconView
             return pinView
         }
         else {
@@ -144,6 +143,7 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         }
         return false
     }
+    
     func showNearLocation(lat: Double, lng: Double, name: String, address: String){
         mapsToShow.delegate = self
         mapsToShow.showsScale = true
@@ -151,17 +151,13 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         let span = MKCoordinateSpan(latitudeDelta: 0.08, longitudeDelta: 0.08)
         let location = CLLocationCoordinate2D(latitude: lat, longitude: lng)
         let region = MKCoordinateRegion(center: location, span: span)
-        
         mapsToShow.setRegion(region, animated: true)
-        
         let annotation = MKPointAnnotation()
         annotation.title = name
         annotation.subtitle = address
         annotation.coordinate = location
         annotations.append(annotation)
-        //self.mapsToShow.addAnnotation(annotation)
-        
-        
+    
     }
     func showData(array: [ModelOfDirec]) {
         
@@ -176,12 +172,11 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         case 0:
             urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=2000&type=restaurant&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
         case 1:
-            
             urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=2000&type=hospital&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
         case 2:
-            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=2000&type=school&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg" // done
+            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=2000&type=school&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
         case 3:
-            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=2000&type=hotel&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg" // done
+            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=2000&type=hotel&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
         case 4:
             urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=5000&type=museum&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
         case 5:
@@ -219,7 +214,6 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
                 }
             }
             }.resume()
-        
     }
     
     /*
@@ -279,13 +273,59 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
                     catch let someError as NSException{
                         print(someError)
                     }
-                    
                 }
-                
-                
             }
             // }
             }.resume()
             }
+    //showDetailsInMap
+    // showDetailsInMap
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        makeChoice(title: "More Details", content: "Please choice button below")
+        titlePinLocation = (view.annotation?.title!)!
+        subtitlePinLocation = (view.annotation?.subtitle!)!
+        latPinLocation = String(describing: (view.annotation?.coordinate.latitude)!)
+        lngPinLocation = String(describing: (view.annotation?.coordinate.longitude)!)
+        latDirection = Double((view.annotation?.coordinate.latitude)!)
+        lngDirection = Double((view.annotation?.coordinate.longitude)!)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "showDetailsInMap"){
+            let secondViewController = segue.destination as! ShowDetailInMapsTableViewController
+            
+            secondViewController.titlePinLocation = self.titlePinLocation
+            secondViewController.subtitlePinLocation = self.subtitlePinLocation
+            secondViewController.latPinLocation = self.latPinLocation
+            secondViewController.lngPinLocation = self.lngPinLocation
+        }
+        if (segue.identifier == "showDirections"){
+            let nextViewController = segue.destination as! DirectionViewController
+            nextViewController.latDirection = self.latDirection
+            nextViewController.lngDirection = self.lngDirection
+        }
+    }
+    
+    func makeChoice(title: String, content: String){
+        //var numchoice = 0
+        let alert = UIAlertController(title: title, message: content, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Details", style: .default, handler: MyDetails))
+        
+        alert.addAction(UIAlertAction(title: "Direction", style: .default, handler: MyDirections))
+        
+        self.present(alert, animated:  true, completion: nil)
+
+
+    }
+    func MyDetails(alert: UIAlertAction){
+        performSegue(withIdentifier: "showDetailsInMap", sender: self)
+        print("Choice details")
+    }
+    func MyDirections(alert: UIAlertAction){
+        //performSegue(withIdentifier: "showDetailsInMap", sender: self)
+        //showDirections
+        performSegue(withIdentifier: "showDirections", sender: self)
+        print("Choice directions")
+    }
 
 }

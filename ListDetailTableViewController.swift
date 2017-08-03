@@ -119,8 +119,8 @@ class ListDetailTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "connectToDirection"){
             let thirdViewController = segue.destination as! DirectionViewController
-            thirdViewController.latFromListDetail = Double(dataToSendLat)
-            thirdViewController.lngFromListDetail = Double(dataToSendLng)
+            thirdViewController.latDirection = Double(dataToSendLat)
+            thirdViewController.lngDirection = Double(dataToSendLng)
         }
     }
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {

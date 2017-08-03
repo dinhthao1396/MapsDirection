@@ -13,14 +13,14 @@ class DirectionViewController: UIViewController, MKMapViewDelegate, CLLocationMa
 
     @IBOutlet weak var mapsKitDemo: MKMapView!
     
-    var latFromListDetail = Double()
-    var lngFromListDetail = Double()
+    var latDirection = Double()
+    var lngDirection = Double()
     let locationManager = CLLocationManager()
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(latFromListDetail)
-        print(lngFromListDetail)
-        directionData(lat: self.latFromListDetail, long: self.lngFromListDetail)
+        print(latDirection)
+        print(lngDirection)
+        directionData(lat: self.latDirection, long: self.lngDirection)
         
                 // Do any additional setup after loading the view, typically from a nib.
     }

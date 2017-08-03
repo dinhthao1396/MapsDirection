@@ -27,6 +27,9 @@
 		1851A56B1F29A195007DD7BE /* Apps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1851A56A1F29A195007DD7BE /* Apps.swift */; };
 		1851A56E1F29A227007DD7BE /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1851A56D1F29A227007DD7BE /* Util.swift */; };
 		1851A5711F29A2E9007DD7BE /* ModelOfDirec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1851A5701F29A2E9007DD7BE /* ModelOfDirec.swift */; };
+		1882DD691F33030600919655 /* ShowDetailInMapsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1882DD681F33030600919655 /* ShowDetailInMapsTableViewController.swift */; };
+		1882DD721F33098D00919655 /* ShowDetailInMapsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1882DD711F33098D00919655 /* ShowDetailInMapsTableViewCell.swift */; };
+		1882DD741F3310B000919655 /* ModelToShowMoreDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1882DD731F3310B000919655 /* ModelToShowMoreDetail.swift */; };
 		1883A58C1F30EAA700ABDA45 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1883A57F1F30EA8B00ABDA45 /* Alamofire.framework */; };
 		1883A5901F30EAF100ABDA45 /* Alamofire.framework in Copy Framework */ = {isa = PBXBuildFile; fileRef = 1883A57F1F30EA8B00ABDA45 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1899DC631F2A370900FA4F14 /* ListTypeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1899DC621F2A370900FA4F14 /* ListTypeTableViewController.swift */; };
@@ -153,6 +156,9 @@
 		1851A56A1F29A195007DD7BE /* Apps.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Apps.swift; sourceTree = "<group>"; };
 		1851A56D1F29A227007DD7BE /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		1851A5701F29A2E9007DD7BE /* ModelOfDirec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelOfDirec.swift; sourceTree = "<group>"; };
+		1882DD681F33030600919655 /* ShowDetailInMapsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShowDetailInMapsTableViewController.swift; sourceTree = "<group>"; };
+		1882DD711F33098D00919655 /* ShowDetailInMapsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShowDetailInMapsTableViewCell.swift; sourceTree = "<group>"; };
+		1882DD731F3310B000919655 /* ModelToShowMoreDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelToShowMoreDetail.swift; sourceTree = "<group>"; };
 		1883A5731F30EA8A00ABDA45 /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
 		1899DC621F2A370900FA4F14 /* ListTypeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListTypeTableViewController.swift; sourceTree = "<group>"; };
 		1899DC641F2A385F00FA4F14 /* ListTypeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListTypeTableViewCell.swift; sourceTree = "<group>"; };
@@ -262,6 +268,7 @@
 				1899DC621F2A370900FA4F14 /* ListTypeTableViewController.swift */,
 				1899DC681F2A3D6600FA4F14 /* ListDetailTableViewController.swift */,
 				1899DC6E1F2A7AB300FA4F14 /* MapsNearbyViewController.swift */,
+				1882DD681F33030600919655 /* ShowDetailInMapsTableViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -271,6 +278,7 @@
 			children = (
 				1899DC641F2A385F00FA4F14 /* ListTypeTableViewCell.swift */,
 				1899DC6A1F2A3D8800FA4F14 /* ListDetalCellTableViewCell.swift */,
+				1882DD711F33098D00919655 /* ShowDetailInMapsTableViewCell.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -315,6 +323,7 @@
 				1851A5701F29A2E9007DD7BE /* ModelOfDirec.swift */,
 				1899DC661F2A3B7000FA4F14 /* ListTypeModel.swift */,
 				1899DC6C1F2A3DF300FA4F14 /* ListDetailModel.swift */,
+				1882DD731F3310B000919655 /* ModelToShowMoreDetail.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -541,6 +550,8 @@
 				1851A55F1F299C1F007DD7BE /* ExtensionArray.swift in Sources */,
 				181342221F286EBB0064CFE5 /* AppDelegate.swift in Sources */,
 				1851A5621F299C1F007DD7BE /* Gloss.swift in Sources */,
+				1882DD691F33030600919655 /* ShowDetailInMapsTableViewController.swift in Sources */,
+				1882DD721F33098D00919655 /* ShowDetailInMapsTableViewCell.swift in Sources */,
 				1851A56E1F29A227007DD7BE /* Util.swift in Sources */,
 				1851A5671F299C51007DD7BE /* TopApps.swift in Sources */,
 				1899DC6F1F2A7AB300FA4F14 /* MapsNearbyViewController.swift in Sources */,
@@ -552,6 +563,7 @@
 				1851A5611F299C1F007DD7BE /* ExtensionDictionary.swift in Sources */,
 				1899DC6B1F2A3D8800FA4F14 /* ListDetalCellTableViewCell.swift in Sources */,
 				1851A5641F299C1F007DD7BE /* Operators.swift in Sources */,
+				1882DD741F3310B000919655 /* ModelToShowMoreDetail.swift in Sources */,
 				1899DC6D1F2A3DF300FA4F14 /* ListDetailModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
