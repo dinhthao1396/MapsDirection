@@ -14,8 +14,30 @@ class ListTypeTableViewController: UITableViewController {
     var urlString = ""
     var dataToSendViaListButton = Int()
     var dataToSend = Int()
+    var listCheckBox = [Int]()
     
+ 
     @IBOutlet var listTypeView: UITableView!
+    @IBAction func clickToCheck(_ sender: UIButton) {
+        if (sender.isSelected == true){
+            sender.setBackgroundImage(UIImage(named: "checkbox12"), for: UIControlState.normal)
+            let dataFromButtonCheck = sender.tag
+//            for value in listCheckBox[0..<listCheckBox.count]{
+//                if value == dataFromButtonCheck{
+//                    print("Don't append")
+//                }
+//                else{
+//                    
+//                }
+//            }
+            listCheckBox.append(dataFromButtonCheck)
+            print("User choice \(sender.tag)")
+            sender.isSelected = false
+        }else{
+            sender.setBackgroundImage(UIImage(named: "uncheckbox12"), for: UIControlState.normal)
+            sender.isSelected = true
+        }
+    }
 
     
     @IBAction func listButton(_ sender: UIButton) {
@@ -43,13 +65,18 @@ class ListTypeTableViewController: UITableViewController {
         let element7 = ListTypeModel(name: "Gas Station", value: 6)
         listType.append(element7)
         
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Show", style: .plain, target: self, action: #selector(ListTypeTableViewController.showChoice))
+        //listButton(seder: UI)
+        //clickButton.setBackgroundImage(UIImage(named: "uncheckbox12"), for: UIControlState.normal)
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
-
+    func showChoice(){
+        performSegue(withIdentifier: "showChoice", sender: self)
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -72,6 +99,7 @@ class ListTypeTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellOfListType", for: indexPath) as! ListTypeTableViewCell
         cell.list.tag = indexPath.row
         cell.maps.tag = indexPath.row
+        cell.checkBox.tag = indexPath.row
         let nameTypeCell = listType[indexPath.row]
         cell.setDataForCellType(name: nameTypeCell.nameType)
         return cell
@@ -84,7 +112,13 @@ class ListTypeTableViewController: UITableViewController {
         if (segue.identifier == "showMapsNear"){
             let nextViewController = segue.destination as! MapsNearbyViewController
             nextViewController.dataRecevie = self.dataToSend
-            
+            print(dataToSend)
+        }
+        if (segue.identifier == "showChoice"){
+            let nextViewController = segue.destination as! MapsNearbyViewController
+            nextViewController.listCheckBox = self.listCheckBox
+            print(self.listCheckBox.count)
+            self.listCheckBox.removeAll()
         }
         
        

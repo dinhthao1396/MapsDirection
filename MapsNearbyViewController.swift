@@ -33,7 +33,9 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
     var subtitlePinLocation = ""
     var latPinLocation = ""
     var lngPinLocation = ""
-    
+    var urlChoice = ""
+    var urlToShow = ""
+    var listCheckBox = [Int]()
     var count = 0 // test did animataion
 
     private var mapChangedFromUserInteraction = false
@@ -43,7 +45,8 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         mapsToShow.delegate = self
         mapsToShow.showsCompass = true
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Your Location", style: .plain, target: self, action: #selector(MapsNearbyViewController.comeback) )
-        loadData()
+        //loadData()
+        choiceDataToShow(listChoice: listCheckBox, dataRecevie: dataRecevie)
     }
     // new key
     // AIzaSyCGqb3PPJHUacR5SywBgNUQPbaHaSoMqUk
@@ -55,14 +58,14 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
             lngCenter = String(mapView.centerCoordinate.longitude)
             print("stop move")
             print("lat: \(latCenter), Lng: \(lngCenter)")
-            loadDataregionDidChange(lat: latCenter, lng: lngCenter)
+            loadDataregionDidChange(lat: latCenter, lng: lngCenter) // heraaaaaaaaa
         }
         
         print("STOP MOVE ALL \(count)")
         count = count + 1 // need fix
         
     }
-
+    
     func removeAnnotation(){
         let annotationsToRemove = mapsToShow.annotations.filter { $0 !== mapsToShow.userLocation }
         mapsToShow.removeAnnotations( annotationsToRemove )
@@ -70,9 +73,12 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
     
     func comeback(){
         removeAnnotation()
-        loadData()
+        //loadData()
+        choiceDataToShow(listChoice: listCheckBox, dataRecevie: dataRecevie)
         mapsToShow.reloadInputViews()
     }
+    
+
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         let reuseId = "pin"
@@ -89,27 +95,38 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
             pinView?.animatesDrop = true
             pinView?.canShowCallout = true
             pinView?.rightCalloutAccessoryView = rightButton
-            switch dataRecevie{
-                case 0:
-                    url = "https://www.shareicon.net/data/512x512/2016/08/05/807064_knife_512x512.png"
-                case 1:
-                    url = "https://www.shareicon.net/data/512x512/2015/11/01/665295_medical_512x512.png"
-                case 2:
-                    url = "https://www.shareicon.net/data/512x512/2016/09/23/833197_school_512x512.png"
-                case 3:
-                    url = "https://www.shareicon.net/data/512x512/2016/08/19/816747_hotel_512x512.png"
-                case 4:
-                    url = "https://www.shareicon.net/data/512x512/2016/09/21/831298_business_512x512.png"
-                case 5:
-                    url = "https://www.shareicon.net/data/128x128/2016/04/25/501800_refresh_40x40.png"
-                case 6:
-                    url = "https://www.shareicon.net/data/512x512/2015/12/14/687106_service_512x512.png"
-                default:
-                    url = "https://www.shareicon.net/data/512x512/2015/12/14/687106_service_512x512.png"
+//            switch dataRecevie{
+//                case 0:
+//                    url = "https://www.shareicon.net/data/512x512/2016/08/05/807064_knife_512x512.png"
+//                case 1:
+//                    url = "https://www.shareicon.net/data/512x512/2015/11/01/665295_medical_512x512.png"
+//                case 2:
+//                    url = "https://www.shareicon.net/data/512x512/2016/09/23/833197_school_512x512.png"
+//                case 3:
+//                    url = "https://www.shareicon.net/data/512x512/2016/08/19/816747_hotel_512x512.png"
+//                case 4:
+//                    url = "https://www.shareicon.net/data/512x512/2016/09/21/831298_business_512x512.png"
+//                case 5:
+//                    url = "https://www.shareicon.net/data/128x128/2016/04/25/501800_refresh_40x40.png"
+//                case 6:
+//                    url = "https://www.shareicon.net/data/512x512/2015/12/14/687106_service_512x512.png"
+//                default:
+//                    url = "https://www.shareicon.net/data/512x512/2015/12/14/687106_service_512x512.png"
+//            }
+            if listCheckBox.count == 0{
+                url = choiceUrlImage(data: dataRecevie)
+                imageView.image = UIImage(imageView.downLoadFromUrlDemoSimple(urlSimple: url))
+                pinView?.leftCalloutAccessoryView = imageView
+            }else{
+                for value in listCheckBox[0..<listCheckBox.count]{
+                    url = choiceUrlImage(data: value)
+                    imageView.image = UIImage(imageView.downLoadFromUrlDemoSimple(urlSimple: url))
+                    pinView?.leftCalloutAccessoryView = imageView
+                }
             }
-                       
-            imageView.image = UIImage(imageView.downLoadFromUrlDemoSimple(urlSimple: url))
-            pinView?.leftCalloutAccessoryView = imageView
+            //url = choiceIconToShow(listChoice: listCheckBox, dataRecevie: dataRecevie)
+            
+            
             return pinView
         }
         else {
@@ -157,9 +174,42 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         }
         
     }
-    func loadData() {
+    func choiceDataToShow(listChoice: [Int], dataRecevie: Int){
+        if listChoice.count == 0{
+            loadData(data: dataRecevie)
+        }else{
+            for value in listChoice[0..<listChoice.count]{
+                loadData(data: value)
+            }
+        }
+    }
+    
+    func choiceUrlImage(data: Int) -> String{
+        switch data{
+        case 0:
+            urlChoice = "https://www.shareicon.net/data/512x512/2016/08/05/807064_knife_512x512.png"
+        case 1:
+            urlChoice = "https://www.shareicon.net/data/512x512/2015/11/01/665295_medical_512x512.png"
+        case 2:
+            urlChoice = "https://www.shareicon.net/data/512x512/2016/09/23/833197_school_512x512.png"
+        case 3:
+            urlChoice = "https://www.shareicon.net/data/512x512/2016/08/19/816747_hotel_512x512.png"
+        case 4:
+            urlChoice = "https://www.shareicon.net/data/512x512/2016/09/21/831298_business_512x512.png"
+        case 5:
+            urlChoice = "https://www.shareicon.net/data/128x128/2016/04/25/501800_refresh_40x40.png"
+        case 6:
+            urlChoice = "https://www.shareicon.net/data/512x512/2015/12/14/687106_service_512x512.png"
+        default:
+            urlChoice = "https://www.shareicon.net/data/512x512/2015/12/14/687106_service_512x512.png"
+        }
+        print(urlChoice)
+        return urlChoice
+    }
+    
+    func loadData(data: Int) {
 
-        switch dataRecevie {
+        switch data {
         case 0:
             urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=2000&type=restaurant&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
         case 1:

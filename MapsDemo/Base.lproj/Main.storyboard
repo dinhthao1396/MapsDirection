@@ -48,12 +48,26 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5pC-ki-rPz">
+                                            <rect key="frame" x="263" y="16" width="20" height="20"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="20" id="ABc-NL-rxf"/>
+                                                <constraint firstAttribute="height" constant="20" id="xtB-7e-5MK"/>
+                                            </constraints>
+                                            <state key="normal" backgroundImage="uncheckbox12"/>
+                                            <state key="selected" backgroundImage="uncheckbox12"/>
+                                            <connections>
+                                                <action selector="clickToCheck:" destination="POE-Qd-lrE" eventType="touchUpInside" id="QuG-9n-MF8"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="bottomMargin" secondItem="eyR-Vb-6jf" secondAttribute="bottom" constant="15.5" id="52f-Bb-zL9"/>
+                                        <constraint firstItem="5pC-ki-rPz" firstAttribute="centerY" secondItem="Pkk-HZ-bun" secondAttribute="centerY" id="U8V-cT-RUG"/>
                                         <constraint firstItem="FfK-so-mxX" firstAttribute="top" secondItem="wVK-el-saL" secondAttribute="topMargin" constant="3" id="XTX-nU-viN"/>
                                         <constraint firstItem="FfK-so-mxX" firstAttribute="trailing" secondItem="wVK-el-saL" secondAttribute="trailingMargin" id="XtR-qD-7wj"/>
                                         <constraint firstItem="eyR-Vb-6jf" firstAttribute="top" secondItem="wVK-el-saL" secondAttribute="topMargin" constant="13" id="aV7-MT-mgy"/>
+                                        <constraint firstItem="Pkk-HZ-bun" firstAttribute="leading" secondItem="5pC-ki-rPz" secondAttribute="trailing" constant="8" id="clg-z5-WKP"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="Pkk-HZ-bun" secondAttribute="bottom" constant="8.5" id="gPK-Hg-Tk4"/>
                                         <constraint firstItem="Pkk-HZ-bun" firstAttribute="top" secondItem="wVK-el-saL" secondAttribute="topMargin" constant="3" id="hy8-a6-g1c"/>
                                         <constraint firstItem="FfK-so-mxX" firstAttribute="leading" secondItem="Pkk-HZ-bun" secondAttribute="trailing" constant="8" id="mtt-I4-dcB"/>
@@ -62,6 +76,7 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="checkBox" destination="5pC-ki-rPz" id="hF2-tD-k0X"/>
                                     <outlet property="list" destination="FfK-so-mxX" id="DY3-s3-lf5"/>
                                     <outlet property="maps" destination="Pkk-HZ-bun" id="Zmx-bz-ai7"/>
                                     <outlet property="nameType" destination="eyR-Vb-6jf" id="3OC-a1-H06"/>
@@ -76,6 +91,7 @@
                     <navigationItem key="navigationItem" id="rQX-3g-CR3"/>
                     <connections>
                         <outlet property="listTypeView" destination="1HV-bh-DAA" id="E2K-Pk-Ogj"/>
+                        <segue destination="kl7-be-XVe" kind="show" identifier="showChoice" id="bpn-gB-IVM"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="txh-7R-QtC" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -256,7 +272,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Gmq-je-h2z" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="12" y="349"/>
+            <point key="canvasLocation" x="-55" y="241"/>
         </scene>
         <!--Show Detail In Maps Table View Controller-->
         <scene sceneID="DLo-ie-QIn">
@@ -362,7 +378,11 @@
             <point key="canvasLocation" x="777" y="498"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="uncheckbox12" width="12" height="12"/>
+    </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="bpn-gB-IVM"/>
         <segue reference="25R-PN-h1G"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -13,6 +13,7 @@ class ListTypeTableViewCell: UITableViewCell {
     @IBOutlet weak var nameType: UILabel!
     @IBOutlet weak var maps: UIButton!
     @IBOutlet weak var list: UIButton!
+    @IBOutlet weak var checkBox: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()
