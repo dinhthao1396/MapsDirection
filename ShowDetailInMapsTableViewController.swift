@@ -15,9 +15,7 @@ class ShowDetailInMapsTableViewController: UITableViewController {
     var subtitlePinLocation = ""
     var latPinLocation = ""
     var lngPinLocation = ""
-
     var listDetail = [ModelToShowMoreDetail]()
-    var urlString = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,7 +23,7 @@ class ShowDetailInMapsTableViewController: UITableViewController {
         tableDetailShow.dataSource = self
         tableDetailShow.estimatedRowHeight = 44.0
         tableDetailShow.rowHeight = UITableViewAutomaticDimension // xac dinh do rong cua frame
-        
+    
         print(titlePinLocation)
         print(subtitlePinLocation)
         print(latPinLocation)
@@ -57,7 +55,6 @@ class ShowDetailInMapsTableViewController: UITableViewController {
         //print(self.listJSON.count)
         return listDetail.count
     }
-    
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ShowDetailCell", for: indexPath) as! ShowDetailInMapsTableViewCell

@@ -10,10 +10,9 @@ import UIKit
 import MapKit
 import CoreLocation
 
-class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate { //, CLLocationManagerDelegate
+class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
     
     @IBOutlet weak var mapsToShow: MKMapView!
-    var center = ""
     var dataMapsType = Int()
     var urlString = ""
     var dataRecevie = Int()
@@ -26,7 +25,6 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
     var url = ""
     var listToShow = [ModelOfDirec]()
     var annotations = [MKAnnotation]()
-    var dataToSendButtonDetails = Int()
     var listToSendTableDetail = [ModelOfDirec]()
 
     var latDirection = Double()
@@ -37,7 +35,7 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
     var lngPinLocation = ""
     
     var count = 0 // test did animataion
-    //var finalUrl = ""
+
     private var mapChangedFromUserInteraction = false
     
     override func viewDidLoad() {
@@ -46,27 +44,22 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         mapsToShow.showsCompass = true
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Your Location", style: .plain, target: self, action: #selector(MapsNearbyViewController.comeback) )
         loadData()
-        
-
-        
     }
     // new key
     // AIzaSyCGqb3PPJHUacR5SywBgNUQPbaHaSoMqUk
 
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         mapChangedFromUserInteraction = mapViewRegionDidChangeFromUserInteraction()
-        //removeAnnotation()
         if (mapChangedFromUserInteraction){
             latCenter = String(mapView.centerCoordinate.latitude)
             lngCenter = String(mapView.centerCoordinate.longitude)
             print("stop move")
             print("lat: \(latCenter), Lng: \(lngCenter)")
             loadDataregionDidChange(lat: latCenter, lng: lngCenter)
-
         }
         
         print("STOP MOVE ALL \(count)")
-        count = count + 1
+        count = count + 1 // need fix
         
     }
 
@@ -79,7 +72,6 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         removeAnnotation()
         loadData()
         mapsToShow.reloadInputViews()
-        //mapsToShow.removeAnnotation(mapsToShow.annotations as! MKAnnotation)
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -136,7 +128,7 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         //  Look through gesture recognizers to determine whether this region change is from user interaction
         if let gestureRecognizers = view.gestureRecognizers {
             for recognizer in gestureRecognizers {
-                if(recognizer.state == UIGestureRecognizerState.ended ) { // recognizer.state == UIGestureRecognizerState.began ||
+                if(recognizer.state == UIGestureRecognizerState.ended ) {
                     return true
                 }
             }
@@ -160,7 +152,6 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
     
     }
     func showData(array: [ModelOfDirec]) {
-        
         for i in 0..<array.count {
             showNearLocation(lat: Double(array[i].lat), lng: Double(array[i].lng), name: array[i].name, address: array[i].vicinity)
         }
@@ -254,7 +245,7 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         
         URLSession.shared.dataTask(with:url!) { (data, response, error) in
             if error != nil {
-                print("Some thing Wrong sssssssss")
+                print("Some thing Wrong ")
             } else
             {
                 OperationQueue.main.addOperation{
@@ -275,25 +266,24 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
                     }
                 }
             }
-            // }
             }.resume()
             }
-    //showDetailsInMap
-    // showDetailsInMap
+    
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        makeChoice(title: "More Details", content: "Please choice button below")
+        if control == view.rightCalloutAccessoryView {
+        makeChoice(title: "More Details")
         titlePinLocation = (view.annotation?.title!)!
         subtitlePinLocation = (view.annotation?.subtitle!)!
         latPinLocation = String(describing: (view.annotation?.coordinate.latitude)!)
         lngPinLocation = String(describing: (view.annotation?.coordinate.longitude)!)
         latDirection = Double((view.annotation?.coordinate.latitude)!)
         lngDirection = Double((view.annotation?.coordinate.longitude)!)
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "showDetailsInMap"){
             let secondViewController = segue.destination as! ShowDetailInMapsTableViewController
-            
             secondViewController.titlePinLocation = self.titlePinLocation
             secondViewController.subtitlePinLocation = self.subtitlePinLocation
             secondViewController.latPinLocation = self.latPinLocation
@@ -306,13 +296,14 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         }
     }
     
-    func makeChoice(title: String, content: String){
+    func makeChoice(title: String){
         //var numchoice = 0
-        let alert = UIAlertController(title: title, message: content, preferredStyle: .alert)
+        let alert = UIAlertController(title: title, message: nil, preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Details", style: .default, handler: MyDetails))
-        
         alert.addAction(UIAlertAction(title: "Direction", style: .default, handler: MyDirections))
-        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
+            print("User cancel")
+        }))
         self.present(alert, animated:  true, completion: nil)
 
 
@@ -322,8 +313,6 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         print("Choice details")
     }
     func MyDirections(alert: UIAlertAction){
-        //performSegue(withIdentifier: "showDetailsInMap", sender: self)
-        //showDirections
         performSegue(withIdentifier: "showDirections", sender: self)
         print("Choice directions")
     }
