@@ -8,7 +8,8 @@
 // ok ok
 import UIKit
 
-class ListTypeTableViewController: UITableViewController {
+class ListTypeTableViewController: UITableViewController, UITextFieldDelegate {
+    @IBOutlet weak var textFieldRadius: UITextField!
     
     var listType = [ListTypeModel]()
     var urlString = ""
@@ -17,8 +18,12 @@ class ListTypeTableViewController: UITableViewController {
     var listCheckBox = [Int]()
     var isCheckBox = false
     var dataFromButtonCheck  = Int()
- 
+    var dataRadius = ""
+    //let textField = UITextField()
+    
     @IBOutlet var listTypeView: UITableView!
+    
+    
     
     @IBAction func clickToCheck(_ sender: UIButton) {
         dataFromButtonCheck = sender.tag
@@ -71,6 +76,7 @@ class ListTypeTableViewController: UITableViewController {
         super.viewDidLoad()
         listTypeView.delegate = self
         listTypeView.dataSource = self
+        textFieldRadius.delegate = self
         let element1 = ListTypeModel(name: "Restaurant", value: 0)
         listType.append(element1)
         let element2 = ListTypeModel(name: "Hopital", value: 1)
@@ -87,17 +93,25 @@ class ListTypeTableViewController: UITableViewController {
         listType.append(element7)
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Show", style: .plain, target: self, action: #selector(ListTypeTableViewController.showChoice))
+        textFieldRadius.resignFirstResponder()
+        hideKeyboardWhenTappedAround() // keyboard don't hide
+        textFieldRadius.clearsOnBeginEditing = true
+ 
 
-        
-        //listButton(seder: UI)
-        //clickButton.setBackgroundImage(UIImage(named: "uncheckbox12"), for: UIControlState.normal)
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+        textFieldRadius.resignFirstResponder() //don't work
+    }
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
     func testListToShow(title: String, content: String){
         let alert = UIAlertController(title: title, message: content , preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: { (action) in
@@ -109,11 +123,23 @@ class ListTypeTableViewController: UITableViewController {
     
     
     func showChoice(){
-        if listCheckBox.count == 0{
-            testListToShow(title: "Nothing To Show", content: "Please check some place you want to show")
-        }else{
-            performSegue(withIdentifier: "showChoice", sender: self)
+        textFieldRadius.resignFirstResponder()
+        let numInTextField = textFieldRadius.text
+        if let dataRadiusInt = Int(numInTextField!){
+            if listCheckBox.count == 0{
+                testListToShow(title: "Nothing To Show", content: "Please check some place you want to show")
+            }else{
+                dataRadius = String(dataRadiusInt)
+                print("data in textfield \(dataRadius)")
+                performSegue(withIdentifier: "showChoice", sender: self)
+                
+            }
         }
+        else{
+            testListToShow(title: "Radius must to be number", content: "Please enter radius again")
+        }
+
+        
         self.listTypeView.reloadData()
         
 
@@ -150,6 +176,7 @@ class ListTypeTableViewController: UITableViewController {
         if (segue.identifier == "connectToListDetail"){
             let secondViewController = segue.destination as! ListDetailTableViewController
             secondViewController.dataFromListType = self.dataToSendViaListButton
+            secondViewController.dataRadius = self.dataRadius
         }
         if (segue.identifier == "showMapsNear"){
             let nextViewController = segue.destination as! MapsNearbyViewController
@@ -159,6 +186,8 @@ class ListTypeTableViewController: UITableViewController {
         if (segue.identifier == "showChoice"){
             let nextViewController = segue.destination as! MapsNearbyViewController
             nextViewController.listCheckBox = self.listCheckBox
+            nextViewController.dataRadius = self.dataRadius
+            self.dataRadius = ""
             print(self.listCheckBox.count)
             self.listCheckBox.removeAll()
         }

@@ -14,6 +14,7 @@ public struct Apps: Decodable {
     public let lng: Float
     public let name: String
     public let vicinity: String
+    public let urlIcon: String
     
     public init?(json: JSON) {
         
@@ -27,12 +28,14 @@ public struct Apps: Decodable {
         }
         
         guard let name: String  = "name" <~~ json,
-            let vicinity: String = "vicinity" <~~ json else {
+            let vicinity: String = "vicinity" <~~ json,
+            let urlIcon: String = "icon" <~~ json else {
                 return nil
         }
         self.vicinity = vicinity
         self.name = name
         self.lat = lat
         self.lng = lng
+        self.urlIcon = urlIcon
     }
 }

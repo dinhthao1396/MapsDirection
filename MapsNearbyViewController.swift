@@ -23,7 +23,7 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
     var locationOfUrl = ""
     var tailOfUrl = ""
     var url = ""
-    var listToShow = [ModelOfDirec]()
+    var listToShow = [ModelOfAnnotationView]()
     var annotations = [MKAnnotation]()
     var listToSendTableDetail = [ModelOfDirec]()
 
@@ -35,6 +35,7 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
     var lngPinLocation = ""
     var urlChoice = ""
     var urlToShow = ""
+    var dataRadius = ""
     var listCheckBox = [Int]()
     var count = 0 // test did animataion
 
@@ -47,6 +48,7 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Your Location", style: .plain, target: self, action: #selector(MapsNearbyViewController.comeback) )
         //loadData()
         choiceDataToShow(listChoice: listCheckBox, dataRecevie: dataRecevie)
+        //dataRadius = ""
     }
     // new key
     // AIzaSyCGqb3PPJHUacR5SywBgNUQPbaHaSoMqUk
@@ -56,9 +58,7 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         if (mapChangedFromUserInteraction){
             latCenter = String(mapView.centerCoordinate.latitude)
             lngCenter = String(mapView.centerCoordinate.longitude)
-            print("stop move")
-            print("lat: \(latCenter), Lng: \(lngCenter)")
-            loadDataregionDidChange(lat: latCenter, lng: lngCenter) // heraaaaaaaaa
+            choiceDataToLoadWhenUSerChangeRegion(list: listCheckBox, data: dataRecevie, lat: latCenter, lng: lngCenter)
         }
         
         print("STOP MOVE ALL \(count)")
@@ -73,80 +73,8 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
     
     func comeback(){
         removeAnnotation()
-        //loadData()
         choiceDataToShow(listChoice: listCheckBox, dataRecevie: dataRecevie)
         mapsToShow.reloadInputViews()
-    }
-    
-
-    
-    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        let reuseId = "pin"
-        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
-        if !(annotation is MKUserLocation) {
-            
-            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: String(annotation.hash))
-            
-            let rightButton = UIButton(type: .detailDisclosure)
-            let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
-            pinView?.pinTintColor = UIColor.red
-            pinView?.isEnabled = true
-            pinView?.animatesDrop = true
-            pinView?.canShowCallout = true
-            pinView?.rightCalloutAccessoryView = rightButton
-            switch dataRecevie{
-                case 0:
-                    url = "https://www.shareicon.net/data/512x512/2016/08/05/807064_knife_512x512.png"
-                case 1:
-                    url = "https://www.shareicon.net/data/512x512/2015/11/01/665295_medical_512x512.png"
-                case 2:
-                    url = "https://www.shareicon.net/data/512x512/2016/09/23/833197_school_512x512.png"
-                case 3:
-                    url = "https://www.shareicon.net/data/512x512/2016/08/19/816747_hotel_512x512.png"
-                case 4:
-                    url = "https://www.shareicon.net/data/512x512/2016/09/21/831298_business_512x512.png"
-                case 5:
-                    url = "https://www.shareicon.net/data/128x128/2016/04/25/501800_refresh_40x40.png"
-                case 6:
-                    url = "https://www.shareicon.net/data/512x512/2015/12/14/687106_service_512x512.png"
-                default:
-                    url = "https://www.shareicon.net/data/512x512/2015/12/14/687106_service_512x512.png"
-            }
-//            if listCheckBox.count == 0{
-//                url = choiceUrlImage(data: dataRecevie)
-//            }else{
-//                for value in listCheckBox[0..<listCheckBox.count]{
-//                    url = choiceUrlImage(data: value)
-//                }
-//            }
-            imageView.image = UIImage(imageView.downLoadFromUrlDemoSimple(urlSimple: url))
-            pinView?.leftCalloutAccessoryView = imageView
-            
-            
-            return pinView
-        }
-        else {
-            return nil
-        }
-    }
-    // key API
-    //AIzaSyCv4yTcccoPiEoL76MBX__VHMlZtDHGx-U
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    private func mapViewRegionDidChangeFromUserInteraction() -> Bool {
-        let view = self.mapsToShow.subviews[0]
-        //  Look through gesture recognizers to determine whether this region change is from user interaction
-        if let gestureRecognizers = view.gestureRecognizers {
-            for recognizer in gestureRecognizers {
-                if(recognizer.state == UIGestureRecognizerState.ended ) {
-                    return true
-                }
-            }
-        }
-        return false
     }
     
     func showNearLocation(lat: Double, lng: Double, name: String, address: String){
@@ -162,8 +90,55 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         annotation.subtitle = address
         annotation.coordinate = location
         annotations.append(annotation)
-    
+        
     }
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        let reuseId = "pin"
+        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
+        if !(annotation is MKUserLocation) {
+            
+            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            
+            let rightButton = UIButton(type: .detailDisclosure)
+            let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
+            pinView?.pinTintColor = UIColor.red
+            //pinView?.
+            pinView?.isEnabled = true
+            pinView?.animatesDrop = true
+            pinView?.canShowCallout = true
+            pinView?.rightCalloutAccessoryView = rightButton            
+            for urlValue in listToShow[0..<listToShow.count] {
+                url = urlValue.url
+                imageView.image = UIImage(imageView.downLoadFromUrlDemoSimple(urlSimple: url))
+                pinView?.leftCalloutAccessoryView = imageView
+
+            }
+            return pinView
+        }
+        else {
+            return nil
+        }
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    private func mapViewRegionDidChangeFromUserInteraction() -> Bool {
+        let view = self.mapsToShow.subviews[0]
+        if let gestureRecognizers = view.gestureRecognizers {
+            for recognizer in gestureRecognizers {
+                if(recognizer.state == UIGestureRecognizerState.ended ) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+    
+
     func showData(array: [ModelOfDirec]) {
         for i in 0..<array.count {
             showNearLocation(lat: Double(array[i].lat), lng: Double(array[i].lng), name: array[i].name, address: array[i].vicinity)
@@ -180,47 +155,35 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         }
     }
     
-    func choiceUrlImage(data: Int) -> String{
-        switch data{
-        case 0:
-            urlChoice = "https://www.shareicon.net/data/512x512/2016/08/05/807064_knife_512x512.png"
-        case 1:
-            urlChoice = "https://www.shareicon.net/data/512x512/2015/11/01/665295_medical_512x512.png"
-        case 2:
-            urlChoice = "https://www.shareicon.net/data/512x512/2016/09/23/833197_school_512x512.png"
-        case 3:
-            urlChoice = "https://www.shareicon.net/data/512x512/2016/08/19/816747_hotel_512x512.png"
-        case 4:
-            urlChoice = "https://www.shareicon.net/data/512x512/2016/09/21/831298_business_512x512.png"
-        case 5:
-            urlChoice = "https://www.shareicon.net/data/128x128/2016/04/25/501800_refresh_40x40.png"
-        case 6:
-            urlChoice = "https://www.shareicon.net/data/512x512/2015/12/14/687106_service_512x512.png"
-        default:
-            urlChoice = "https://www.shareicon.net/data/512x512/2015/12/14/687106_service_512x512.png"
+    func choiceDataToLoadWhenUSerChangeRegion(list: [Int], data: Int , lat: String, lng: String ){
+        if list.count == 0{
+            loadDataregionDidChange(lat: lat, lng: lng, data: data)
+            //loadData(data: dataRecevie)
+        }else{
+            for value in list[0..<list.count]{
+                loadDataregionDidChange(lat: lat, lng: lng, data: value)
+            }
         }
-        //print(urlChoice)
-        return urlChoice
     }
     
     func loadData(data: Int) {
-
+        
         switch data {
         case 0:
-            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=2000&type=restaurant&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=restaurant&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
         case 1:
-            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=2000&type=hospital&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=hospital&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
         case 2:
-            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=2000&type=school&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=school&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
         case 3:
-            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=2000&type=hotel&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=hotel&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
         case 4:
-            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=5000&type=museum&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=museum&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
         case 5:
-            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=5000&type=atm&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
-        case 6: urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=5000&type=gas_station&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=atm&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+        case 6: urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=gas_station&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
         default:
-            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=2000&type=restaurant&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=restaurant&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
         }
         print(urlString)
         let url = URL(string: urlString)
@@ -238,7 +201,8 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
                     self.annotations.removeAll()
                     for i in 0..<appItem.count {
                         self.showNearLocation(lat: Double(appItem[i].lat), lng: Double(appItem[i].lng), name: appItem[i].name, address: appItem[i].vicinity)
-                        //self.showNearLocation(lat: ), lng: Double(), name: , address: appItem[i].vicinity)
+                        let element = ModelOfAnnotationView(latModel: appItem[i].lat, lngModel: appItem[i].lng, nameModel: appItem[i].name, vicinityModel: appItem[i].vicinity, urlModel: appItem[i].urlIcon )
+                        self.listToShow.append(element)
                     }
                     self.mapsToShow.addAnnotations(self.annotations)
                 } catch let error as NSError {
@@ -262,33 +226,35 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         // Pass the selected object to the new view controller.
     }
     */
-    func loadDataregionDidChange(lat: String, lng: String) {
+    
+    func loadDataregionDidChange(lat: String, lng: String, data: Int) {
         removeAnnotation()
-        switch dataRecevie {
+        switch data {
         case 0:
             
-            tailOfUrl = "&radius=2000&type=restaurant&key=AIzaSyCGqb3PPJHUacR5SywBgNUQPbaHaSoMqUk"
+            tailOfUrl = "&radius=\(dataRadius)&type=restaurant&key=AIzaSyCGqb3PPJHUacR5SywBgNUQPbaHaSoMqUk"
         case 1:
-            tailOfUrl = "&radius=2000&type=hospital&key=AIzaSyCGqb3PPJHUacR5SywBgNUQPbaHaSoMqUk"
+            tailOfUrl = "&radius=\(dataRadius)&type=hospital&key=AIzaSyCGqb3PPJHUacR5SywBgNUQPbaHaSoMqUk"
         case 2:
-            tailOfUrl = "&radius=2000&type=school&key=AIzaSyCGqb3PPJHUacR5SywBgNUQPbaHaSoMqUk"
+            tailOfUrl = "&radius=\(dataRadius)&type=school&key=AIzaSyCGqb3PPJHUacR5SywBgNUQPbaHaSoMqUk"
         case 3:
-            tailOfUrl = "&radius=2000&type=hotel&key=AIzaSyCGqb3PPJHUacR5SywBgNUQPbaHaSoMqUk"
+            tailOfUrl = "&radius=\(dataRadius)&type=hotel&key=AIzaSyCGqb3PPJHUacR5SywBgNUQPbaHaSoMqUk"
         case 4:
-            tailOfUrl = "&radius=5000&type=museum&key=AIzaSyCGqb3PPJHUacR5SywBgNUQPbaHaSoMqUk"
+            tailOfUrl = "&radius=\(dataRadius)&type=museum&key=AIzaSyCGqb3PPJHUacR5SywBgNUQPbaHaSoMqUk"
         case 5:
-            tailOfUrl = "&radius=5000&type=atm&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+            tailOfUrl = "&radius=\(dataRadius)&type=atm&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
         case 6:
-            tailOfUrl = "&radius=5000&type=gas_station&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+            tailOfUrl = "&radius=\(dataRadius)&type=gas_station&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
         default:
-            tailOfUrl = "&radius=2000&type=restaurant&key=AIzaSyCGqb3PPJHUacR5SywBgNUQPbaHaSoMqUk"
+            tailOfUrl = "&radius=\(dataRadius)&type=restaurant&key=AIzaSyCGqb3PPJHUacR5SywBgNUQPbaHaSoMqUk"
         }
         headOfUrl = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="
         locationOfUrl = "\(lat)" + "," + "\(lng)"
         urlString = headOfUrl + locationOfUrl + tailOfUrl
         print(urlString)
+        print("From load data")
         let url = URL(string: urlString)
-        
+        //dataRadius = ""
         URLSession.shared.dataTask(with:url!) { (data, response, error) in
             if error != nil {
                 print("Some thing Wrong ")
@@ -326,9 +292,6 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
             latDirection = Double((view.annotation?.coordinate.latitude)!)
             lngDirection = Double((view.annotation?.coordinate.longitude)!)
             print("Button right was tapped")
-        }
-        if control == view.leftCalloutAccessoryView {
-            print("User press at image")
         }
     }
     

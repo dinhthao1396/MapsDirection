@@ -32,6 +32,7 @@
 		1882DD741F3310B000919655 /* ModelToShowMoreDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1882DD731F3310B000919655 /* ModelToShowMoreDetail.swift */; };
 		1883A58C1F30EAA700ABDA45 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1883A57F1F30EA8B00ABDA45 /* Alamofire.framework */; };
 		1883A5901F30EAF100ABDA45 /* Alamofire.framework in Copy Framework */ = {isa = PBXBuildFile; fileRef = 1883A57F1F30EA8B00ABDA45 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		1886C0481F3436FA00497507 /* ModelOfAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1886C0471F3436FA00497507 /* ModelOfAnnotationView.swift */; };
 		1899DC631F2A370900FA4F14 /* ListTypeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1899DC621F2A370900FA4F14 /* ListTypeTableViewController.swift */; };
 		1899DC651F2A385F00FA4F14 /* ListTypeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1899DC641F2A385F00FA4F14 /* ListTypeTableViewCell.swift */; };
 		1899DC671F2A3B7000FA4F14 /* ListTypeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1899DC661F2A3B7000FA4F14 /* ListTypeModel.swift */; };
@@ -160,6 +161,7 @@
 		1882DD711F33098D00919655 /* ShowDetailInMapsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShowDetailInMapsTableViewCell.swift; sourceTree = "<group>"; };
 		1882DD731F3310B000919655 /* ModelToShowMoreDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelToShowMoreDetail.swift; sourceTree = "<group>"; };
 		1883A5731F30EA8A00ABDA45 /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
+		1886C0471F3436FA00497507 /* ModelOfAnnotationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelOfAnnotationView.swift; sourceTree = "<group>"; };
 		1899DC621F2A370900FA4F14 /* ListTypeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListTypeTableViewController.swift; sourceTree = "<group>"; };
 		1899DC641F2A385F00FA4F14 /* ListTypeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListTypeTableViewCell.swift; sourceTree = "<group>"; };
 		1899DC661F2A3B7000FA4F14 /* ListTypeModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListTypeModel.swift; sourceTree = "<group>"; };
@@ -324,6 +326,7 @@
 				1899DC661F2A3B7000FA4F14 /* ListTypeModel.swift */,
 				1899DC6C1F2A3DF300FA4F14 /* ListDetailModel.swift */,
 				1882DD731F3310B000919655 /* ModelToShowMoreDetail.swift */,
+				1886C0471F3436FA00497507 /* ModelOfAnnotationView.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -544,6 +547,7 @@
 			files = (
 				1851A55E1F299C1F007DD7BE /* Encoder.swift in Sources */,
 				181342241F286EBB0064CFE5 /* DirectionViewController.swift in Sources */,
+				1886C0481F3436FA00497507 /* ModelOfAnnotationView.swift in Sources */,
 				1851A55D1F299C1F007DD7BE /* Decoder.swift in Sources */,
 				1851A5601F299C1F007DD7BE /* ExtensionDecodable.swift in Sources */,
 				1899DC651F2A385F00FA4F14 /* ListTypeTableViewCell.swift in Sources */,

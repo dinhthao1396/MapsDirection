@@ -28,7 +28,9 @@
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FfK-so-mxX">
                                             <rect key="frame" x="337" y="11" width="30" height="30"/>
-                                            <state key="normal" title="List"/>
+                                            <state key="normal" title="List">
+                                                <color key="titleColor" red="0.201233879" green="0.1216862417" blue="0.12114280400000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </state>
                                             <connections>
                                                 <action selector="listButton:" destination="POE-Qd-lrE" eventType="touchUpInside" id="zTT-Lo-D5a"/>
                                                 <segue destination="OrL-9S-WFj" kind="show" identifier="connectToListDetail" id="w6Z-RM-gLS"/>
@@ -36,7 +38,9 @@
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pkk-HZ-bun">
                                             <rect key="frame" x="291" y="11" width="38" height="30"/>
-                                            <state key="normal" title="Maps"/>
+                                            <state key="normal" title="Maps">
+                                                <color key="titleColor" red="0.201233879" green="0.1216862417" blue="0.12114280400000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </state>
                                             <connections>
                                                 <action selector="maps:" destination="POE-Qd-lrE" eventType="touchUpInside" id="TrW-Ks-am7"/>
                                                 <segue destination="kl7-be-XVe" kind="show" identifier="showMapsNear" id="EZK-F2-9GY"/>
@@ -78,6 +82,7 @@
                                         <constraint firstItem="eyR-Vb-6jf" firstAttribute="leading" secondItem="wVK-el-saL" secondAttribute="leadingMargin" id="z5Z-zz-WES"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <color key="backgroundColor" red="0.9921875" green="0.95696992724099195" blue="0.58421830141952158" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
                                     <outlet property="checkBox" destination="5pC-ki-rPz" id="hF2-tD-k0X"/>
                                     <outlet property="list" destination="FfK-so-mxX" id="DY3-s3-lf5"/>
@@ -91,9 +96,19 @@
                             <outlet property="delegate" destination="POE-Qd-lrE" id="XHJ-DB-Kca"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="rQX-3g-CR3"/>
+                    <navigationItem key="navigationItem" id="rQX-3g-CR3">
+                        <barButtonItem key="leftBarButtonItem" style="plain" id="2vX-e8-seg">
+                            <textField key="customView" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" usesAttributedText="YES" borderStyle="roundedRect" placeholder="Radius" clearsOnBeginEditing="YES" minimumFontSize="17" clearButtonMode="whileEditing" id="3VR-Uv-kTq">
+                                <rect key="frame" x="16" y="7" width="83" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <attributedString key="attributedText"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                            </textField>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="listTypeView" destination="1HV-bh-DAA" id="K5F-5g-uFi"/>
+                        <outlet property="textFieldRadius" destination="3VR-Uv-kTq" id="T7x-A6-Cfs"/>
                         <segue destination="kl7-be-XVe" kind="show" identifier="showChoice" id="bpn-gB-IVM"/>
                     </connections>
                 </tableViewController>
