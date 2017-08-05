@@ -7,7 +7,7 @@
 //
 // ok ok ok
 import UIKit
-
+import Alamofire
 class ListDetailTableViewController: UITableViewController {
     
     @IBOutlet var listDetailJSON: UITableView!
@@ -20,7 +20,8 @@ class ListDetailTableViewController: UITableViewController {
     var urlString = ""
     var dataToSendLat = Float()
     var dataToSendLng = Float()
-    var dataRadius = ""
+    var dataRadius = "2000"
+     var listAlamo = [ModelAlamofire]()
     var refreshControlJSON : UIRefreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
@@ -40,6 +41,7 @@ class ListDetailTableViewController: UITableViewController {
         refreshControlJSON.attributedTitle = NSAttributedString(string: "Load more information", attributes: [NSForegroundColorAttributeName : UIColor.red])
         refreshControlJSON.addTarget(self, action: #selector(ListDetailTableViewController.refreshData), for: UIControlEvents.valueChanged)
         
+        //loadDataToShowAlamo()
         
         
         // Uncomment the following line to preserve selection between presentations
@@ -48,74 +50,131 @@ class ListDetailTableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
+   
+    func loadDataAlamo(url: String){
+  
+        Alamofire.request(url)
+            .validate()
+            .responseJSON{ response in
+                
+                if response.result.isSuccess {
+                    print("JSON Link Available")
+                }
+                if let jsonData = response.result.value as? [String: Any] {
+                    if  let results = jsonData["results"] as? [[String: Any]]{
+                        if self.tempEnd <= results.count {
+                        for value in results[self.tempStar...self.tempEnd] {
+                            let dataNameAdd = ModelAlamofire(JSON: value)
+                            self.listAlamo.append(dataNameAdd!)
+                        }
+                    }
+                        self.tempStar = self.tempEnd + 1
+                        self.tempEnd = self.tempEnd + 5
+                    if (self.listAlamo.count == results.count){
+                        self.indicatorJSON.stopAnimating()
+                        self.indicatorJSON.hidesWhenStopped = true
+                        }
+                    
+                    }
+                OperationQueue.main.addOperation {
+                    self.listDetailJSON.reloadData()
+                }
+            }
+                
+        }
+    }
+    func loadDataToShowAlamo(){
+            switch dataFromListType {
+            case 0:
+                urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=restaurant&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+            case 1:
+                urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=hospital&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+            case 2:
+                urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=school&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+            case 3:
+                urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=hotel&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+            case 4:
+                urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=museum&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+            case 5:
+                urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=atm&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+            case 6: urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=gas_station&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+            default:
+                urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=restaurant&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+                
+            }
+            
+            loadDataAlamo(url: urlString)
+    }
+    
     func refreshData(){
     
         self.tempStar = 0
         self.tempEnd = 4
         self.listJSONDetail = [ModelOfDirec]()
-        loadData()
+        //loadData()
+        loadDataToShowAlamo()
         listDetailJSON.reloadData()
         refreshControlJSON.endRefreshing()
     }
-    func loadData(){
-        switch dataFromListType {
-        case 0:
-            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=restaurant&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
-        case 1:
-            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=hospital&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
-        case 2:
-            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=school&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
-        case 3:
-            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=hotel&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
-        case 4:
-            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=museum&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
-        case 5:
-            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=atm&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
-        case 6: urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=gas_station&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
-        default:
-            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=restaurant&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
-
-        }
-       
-        
-        let url = URL(string: urlString)
-        URLSession.shared.dataTask(with:url!) { (data, response, error) in
-            if error != nil {
-                print("Some thing Wrong")
-            } else
-            {
-                do {
-                    
-                    let parsedData = try JSONSerialization.jsonObject(with: data!) as! [String:Any]
-                    guard let topApps = TopApps(json: parsedData) else {return}
-                    guard let appItem = topApps.results  else {return}
-                    if self.tempEnd <= appItem.count{
-                        for i in self.tempStar...self.tempEnd {
-                            let element = ModelOfDirec(latModel: appItem[i].lat, lngModel: appItem[i].lng, nameModel: appItem[i].name, vicinityModel: appItem[i].vicinity)
-                            self.listJSONDetail.append(element)
-
-                        }
-                        //print(self.listJSON.count)
-                    }
-                    if (self.listJSONDetail.count == appItem.count)
-                    {
-                        self.indicatorJSON.stopAnimating()
-                        self.indicatorJSON.hidesWhenStopped = true
-                    }
-                    self.tempStar = self.tempEnd + 1
-                    self.tempEnd = self.tempEnd + 5
-                    OperationQueue.main.addOperation {
-                        self.listDetailJSON.reloadData()
-                    }
-                    
-                } catch let error as NSError {
-                    print(error)
-                }
-            }
-            
-            }.resume()
-        
-    }
+//    func loadData(){
+//        switch dataFromListType {
+//        case 0:
+//            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=restaurant&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+//        case 1:
+//            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=hospital&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+//        case 2:
+//            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=school&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+//        case 3:
+//            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=hotel&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+//        case 4:
+//            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=museum&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+//        case 5:
+//            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=atm&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+//        case 6: urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=gas_station&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+//        default:
+//            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=restaurant&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+//
+//        }
+//       
+//        loadDataAlamo(url: urlString)
+//        let url = URL(string: urlString)
+//        URLSession.shared.dataTask(with:url!) { (data, response, error) in
+//            if error != nil {
+//                print("Some thing Wrong")
+//            } else
+//            {
+//                do {
+//                    
+//                    let parsedData = try JSONSerialization.jsonObject(with: data!) as! [String:Any]
+//                    guard let topApps = TopApps(json: parsedData) else {return}
+//                    guard let appItem = topApps.results  else {return}
+//                    if self.tempEnd <= appItem.count{
+//                        for i in self.tempStar...self.tempEnd {
+//                            let element = ModelOfDirec(latModel: appItem[i].lat, lngModel: appItem[i].lng, nameModel: appItem[i].name, vicinityModel: appItem[i].vicinity)
+//                            self.listJSONDetail.append(element)
+//
+//                        }
+//                        //print(self.listJSON.count)
+//                    }
+//                    if (self.listJSONDetail.count == appItem.count)
+//                    {
+//                        self.indicatorJSON.stopAnimating()
+//                        self.indicatorJSON.hidesWhenStopped = true
+//                    }
+//                    self.tempStar = self.tempEnd + 1
+//                    self.tempEnd = self.tempEnd + 5
+//                    OperationQueue.main.addOperation {
+//                        self.listDetailJSON.reloadData()
+//                    }
+//                    
+//                } catch let error as NSError {
+//                    print(error)
+//                }
+//            }
+//            
+//            }.resume()
+//        
+//    }
     // connectToDirection
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "connectToDirection"){
@@ -141,8 +200,8 @@ class ListDetailTableViewController: UITableViewController {
         if maxOfset - currentOfSet <= 10 {
             print("load more data")
             indicatorJSON.startAnimating()
-            
-            self.loadData()
+            //self.loadData()
+            self.loadDataToShowAlamo()
         }
     }
     
@@ -161,16 +220,16 @@ class ListDetailTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         //print(self.listJSON.count)
-        return listJSONDetail.count
+        return listAlamo.count
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellJSON", for: indexPath) as! ListDetalCellTableViewCell
-        let element = listJSONDetail[indexPath.row]
-        dataToSendLat = element.lat
-        dataToSendLng = element.lng
-        cell.setDataDetailForCell(name: element.name, address: element.vicinity)
+        let element = listAlamo[indexPath.row]
+        dataToSendLat = Float(element.lat)!
+        dataToSendLng = Float(element.lng)!
+        cell.setDataDetailForCell(name: element.name, address: element.address)
         // Configure the cell...
         return cell
     }

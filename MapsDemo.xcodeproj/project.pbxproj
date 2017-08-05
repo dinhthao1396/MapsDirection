@@ -15,6 +15,7 @@
 		1813422C1F286EBB0064CFE5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1813422A1F286EBB0064CFE5 /* LaunchScreen.storyboard */; };
 		181342371F286EBB0064CFE5 /* MapsDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181342361F286EBB0064CFE5 /* MapsDemoTests.swift */; };
 		181342421F286EBB0064CFE5 /* MapsDemoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181342411F286EBB0064CFE5 /* MapsDemoUITests.swift */; };
+		1840A5281F363F5900646F7E /* ModelAlamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1840A5271F363F5900646F7E /* ModelAlamofire.swift */; };
 		1851A55D1F299C1F007DD7BE /* Decoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1851A5541F299C1F007DD7BE /* Decoder.swift */; };
 		1851A55E1F299C1F007DD7BE /* Encoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1851A5551F299C1F007DD7BE /* Encoder.swift */; };
 		1851A55F1F299C1F007DD7BE /* ExtensionArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1851A5561F299C1F007DD7BE /* ExtensionArray.swift */; };
@@ -144,6 +145,7 @@
 		1813423D1F286EBB0064CFE5 /* MapsDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MapsDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		181342411F286EBB0064CFE5 /* MapsDemoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapsDemoUITests.swift; sourceTree = "<group>"; };
 		181342431F286EBB0064CFE5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1840A5271F363F5900646F7E /* ModelAlamofire.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelAlamofire.swift; sourceTree = "<group>"; };
 		1851A5541F299C1F007DD7BE /* Decoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Decoder.swift; sourceTree = "<group>"; };
 		1851A5551F299C1F007DD7BE /* Encoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Encoder.swift; sourceTree = "<group>"; };
 		1851A5561F299C1F007DD7BE /* ExtensionArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionArray.swift; sourceTree = "<group>"; };
@@ -327,6 +329,7 @@
 				1899DC6C1F2A3DF300FA4F14 /* ListDetailModel.swift */,
 				1882DD731F3310B000919655 /* ModelToShowMoreDetail.swift */,
 				1886C0471F3436FA00497507 /* ModelOfAnnotationView.swift */,
+				1840A5271F363F5900646F7E /* ModelAlamofire.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -554,6 +557,7 @@
 				1851A55F1F299C1F007DD7BE /* ExtensionArray.swift in Sources */,
 				181342221F286EBB0064CFE5 /* AppDelegate.swift in Sources */,
 				1851A5621F299C1F007DD7BE /* Gloss.swift in Sources */,
+				1840A5281F363F5900646F7E /* ModelAlamofire.swift in Sources */,
 				1882DD691F33030600919655 /* ShowDetailInMapsTableViewController.swift in Sources */,
 				1882DD721F33098D00919655 /* ShowDetailInMapsTableViewCell.swift in Sources */,
 				1851A56E1F29A227007DD7BE /* Util.swift in Sources */,

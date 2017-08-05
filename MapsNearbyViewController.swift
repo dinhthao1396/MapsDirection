@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 import CoreLocation
-
+import Alamofire
 class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
     
     @IBOutlet weak var mapsToShow: MKMapView!
@@ -22,11 +22,9 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
     var headOfUrl = ""
     var locationOfUrl = ""
     var tailOfUrl = ""
-    var url = ""
     var listToShow = [ModelOfAnnotationView]()
     var annotations = [MKAnnotation]()
     var listToSendTableDetail = [ModelOfDirec]()
-
     var latDirection = Double()
     var lngDirection = Double()
     var titlePinLocation = ""
@@ -37,6 +35,7 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
     var urlToShow = ""
     var dataRadius = ""
     var listCheckBox = [Int]()
+    var listAlamo = [ModelAlamofire]()
     var count = 0 // test did animataion
 
     private var mapChangedFromUserInteraction = false
@@ -50,8 +49,6 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         choiceDataToShow(listChoice: listCheckBox, dataRecevie: dataRecevie)
         //dataRadius = ""
     }
-    // new key
-    // AIzaSyCGqb3PPJHUacR5SywBgNUQPbaHaSoMqUk
 
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         mapChangedFromUserInteraction = mapViewRegionDidChangeFromUserInteraction()
@@ -63,7 +60,6 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         
         print("STOP MOVE ALL \(count)")
         count = count + 1 // need fix
-        
     }
     
     func removeAnnotation(){
@@ -76,7 +72,21 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         choiceDataToShow(listChoice: listCheckBox, dataRecevie: dataRecevie)
         mapsToShow.reloadInputViews()
     }
-    
+    func showNearLocationAlamo(dataArray: (ModelAlamofire)){
+        mapsToShow.delegate = self
+        mapsToShow.showsScale = true
+        mapsToShow.showsUserLocation = true
+        let span = MKCoordinateSpan(latitudeDelta: 0.08, longitudeDelta: 0.08)
+        let location = CLLocationCoordinate2D(latitude: Double(dataArray.lat)!, longitude: Double(dataArray.lng)!)
+        let region = MKCoordinateRegion(center: location, span: span)
+        mapsToShow.setRegion(region, animated: true)
+        let annotation = MKPointAnnotation()
+        annotation.title = dataArray.name
+        annotation.subtitle = dataArray.address
+        annotation.coordinate = location
+        annotations.append(annotation)
+        
+    }
     func showNearLocation(lat: Double, lng: Double, name: String, address: String){
         mapsToShow.delegate = self
         mapsToShow.showsScale = true
@@ -108,8 +118,8 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
             pinView?.animatesDrop = true
             pinView?.canShowCallout = true
             pinView?.rightCalloutAccessoryView = rightButton            
-            for urlValue in listToShow[0..<listToShow.count] {
-                url = urlValue.url
+            for urlValue in listAlamo[0..<listAlamo.count] {
+                let url = urlValue.urlImage
                 imageView.image = UIImage(imageView.downLoadFromUrlDemoSimple(urlSimple: url))
                 pinView?.leftCalloutAccessoryView = imageView
 
@@ -137,7 +147,6 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         }
         return false
     }
-    
 
     func showData(array: [ModelOfDirec]) {
         for i in 0..<array.count {
@@ -147,10 +156,12 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
     }
     func choiceDataToShow(listChoice: [Int], dataRecevie: Int){
         if listChoice.count == 0{
-            loadData(data: dataRecevie)
+            //loadData(data: dataRecevie)
+            loadDataToShowAlamo(data: dataRecevie)
         }else{
             for value in listChoice[0..<listChoice.count]{
-                loadData(data: value)
+                //loadData(data: value)
+                loadDataToShowAlamo(data: value)
             }
         }
     }
@@ -165,9 +176,33 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
             }
         }
     }
-    
-    func loadData(data: Int) {
+    func loadDataAlamo(url: String){
         
+        Alamofire.request(url)
+            .validate()
+            .responseJSON{ response in
+                
+                if response.result.isSuccess {
+                    print("JSON Link Available")
+                }
+                OperationQueue.main.addOperation{
+                if let jsonData = response.result.value as? [String: Any] {
+                    if  let results = jsonData["results"] as? [[String: Any]]{
+                        self.annotations.removeAll()
+                            for value in results[0..<results.count] {
+                                let data = ModelAlamofire(JSON: value)
+                                self.showNearLocationAlamo(dataArray: data!)
+                                let dataNameAdd = ModelAlamofire(JSON: value)
+                                self.listAlamo.append(dataNameAdd!)
+                            }
+                        self.mapsToShow.addAnnotations(self.annotations)
+                    }
+                }
+            }
+        }
+    }
+    
+    func loadDataToShowAlamo(data: Int){
         switch data {
         case 0:
             urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=restaurant&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
@@ -181,41 +216,66 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
             urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=museum&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
         case 5:
             urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=atm&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
-        case 6: urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=gas_station&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+        case 6:
+            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=gas_station&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
         default:
             urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=restaurant&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+            
         }
-        print(urlString)
-        let url = URL(string: urlString)
         
-        URLSession.shared.dataTask(with:url!) { (data, response, error) in
-            if error != nil {
-                print("Some thing Wrong")
-            } else
-            {
-                OperationQueue.main.addOperation{
-                do {
-                    let parsedData = try JSONSerialization.jsonObject(with: data!) as! [String:Any]
-                    guard let topApps = TopApps(json: parsedData) else {return}
-                    guard let appItem = topApps.results  else {return}
-                    self.annotations.removeAll()
-                    for i in 0..<appItem.count {
-                        self.showNearLocation(lat: Double(appItem[i].lat), lng: Double(appItem[i].lng), name: appItem[i].name, address: appItem[i].vicinity)
-                        let element = ModelOfAnnotationView(latModel: appItem[i].lat, lngModel: appItem[i].lng, nameModel: appItem[i].name, vicinityModel: appItem[i].vicinity, urlModel: appItem[i].urlIcon )
-                        self.listToShow.append(element)
-                    }
-                    self.mapsToShow.addAnnotations(self.annotations)
-                } catch let error as NSError {
-                    print(error)
-                }
-                catch let someError as NSException{
-                    print(someError)
-                }
-               //self.showData(array: self.listToShow)
-                }
-            }
-            }.resume()
+        loadDataAlamo(url: urlString)
     }
+
+//    func loadData(data: Int) {
+//        
+//        switch data {
+//        case 0:
+//            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=restaurant&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+//        case 1:
+//            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=hospital&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+//        case 2:
+//            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=school&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+//        case 3:
+//            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=hotel&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+//        case 4:
+//            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=museum&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+//        case 5:
+//            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=atm&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+//        case 6: urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=gas_station&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+//        default:
+//            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=restaurant&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+//        }
+//        print(urlString)
+//        let url = URL(string: urlString)
+//        
+//        URLSession.shared.dataTask(with:url!) { (data, response, error) in
+//            if error != nil {
+//                print("Some thing Wrong")
+//            } else
+//            {
+//                OperationQueue.main.addOperation{
+//                do {
+//                    let parsedData = try JSONSerialization.jsonObject(with: data!) as! [String:Any]
+//                    guard let topApps = TopApps(json: parsedData) else {return}
+//                    guard let appItem = topApps.results  else {return}
+//                    self.annotations.removeAll()
+//                    for i in 0..<appItem.count {
+//                        self.showNearLocation(lat: Double(appItem[i].lat), lng: Double(appItem[i].lng), name: appItem[i].name, address: appItem[i].vicinity)
+//                        let element = ModelOfAnnotationView(latModel: appItem[i].lat, lngModel: appItem[i].lng, nameModel: appItem[i].name, vicinityModel: appItem[i].vicinity, urlModel: appItem[i].urlIcon )
+//                        self.listToShow.append(element)
+//                    }
+//                    self.mapsToShow.addAnnotations(self.annotations)
+//                } catch let error as NSError {
+//                    print(error)
+//                }
+//                catch let someError as NSException{
+//                    print(someError)
+//                }
+//               //self.showData(array: self.listToShow)
+//                }
+//            }
+//            }.resume()
+//    }
     
     /*
     // MARK: - Navigation
@@ -252,34 +312,35 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         locationOfUrl = "\(lat)" + "," + "\(lng)"
         urlString = headOfUrl + locationOfUrl + tailOfUrl
         print(urlString)
-        print("From load data")
-        let url = URL(string: urlString)
-        //dataRadius = ""
-        URLSession.shared.dataTask(with:url!) { (data, response, error) in
-            if error != nil {
-                print("Some thing Wrong ")
-            } else
-            {
-                OperationQueue.main.addOperation{
-                    do {
-                        let parsedData = try JSONSerialization.jsonObject(with: data!) as! [String:Any]
-                        guard let topApps = TopApps(json: parsedData) else {return}
-                        guard let appItem = topApps.results  else {return}
-                        self.annotations.removeAll()
-                        for i in 0..<appItem.count {
-                            self.showNearLocation(lat: Double(appItem[i].lat), lng: Double(appItem[i].lng), name: appItem[i].name, address: appItem[i].vicinity)
-                        }
-                        self.mapsToShow.addAnnotations(self.annotations)
-                    } catch let error as NSError {
-                        print(error)
-                    }
-                    catch let someError as NSException{
-                        print(someError)
-                    }
-                }
-            }
-            }.resume()
-            }
+        loadDataAlamo(url: urlString)
+
+//        let url = URL(string: urlString)
+//        //dataRadius = ""
+//        URLSession.shared.dataTask(with:url!) { (data, response, error) in
+//            if error != nil {
+//                print("Some thing Wrong ")
+//            } else
+//            {
+//                OperationQueue.main.addOperation{
+//                    do {
+//                        let parsedData = try JSONSerialization.jsonObject(with: data!) as! [String:Any]
+//                        guard let topApps = TopApps(json: parsedData) else {return}
+//                        guard let appItem = topApps.results  else {return}
+//                        self.annotations.removeAll()
+//                        for i in 0..<appItem.count {
+//                            self.showNearLocation(lat: Double(appItem[i].lat), lng: Double(appItem[i].lng), name: appItem[i].name, address: appItem[i].vicinity)
+//                        }
+//                        self.mapsToShow.addAnnotations(self.annotations)
+//                    } catch let error as NSError {
+//                        print(error)
+//                    }
+//                    catch let someError as NSException{
+//                        print(someError)
+//                    }
+//                }
+//            }
+//            }.resume()
+    }
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         
