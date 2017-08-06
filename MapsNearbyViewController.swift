@@ -45,16 +45,28 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         mapsToShow.delegate = self
         mapsToShow.showsCompass = true
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Your Location", style: .plain, target: self, action: #selector(MapsNearbyViewController.comeback) )
-        choiceDataToShow(listChoice: listCheckBox, dataRecevie: dataRecevie)
+        locationManager.requestAlwaysAuthorization()
+        locationManager.requestWhenInUseAuthorization()
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            locationManager.startUpdatingLocation()
+        }
+        let latitude:CLLocationDegrees = (locationManager.location?.coordinate.latitude)!
+        let longitude:CLLocationDegrees = (locationManager.location?.coordinate.longitude)!
+        let latDelta:CLLocationDegrees = 0.05
+        let lonDelta:CLLocationDegrees = 0.05
+        let span = MKCoordinateSpanMake(latDelta, lonDelta)
+        let location = CLLocationCoordinate2DMake(latitude, longitude)
+        let region = MKCoordinateRegionMake(location, span)
+        mapsToShow.setRegion(region, animated: false)
+        //choiceDataToShow(listChoice: listCheckBox, dataRecevie: dataRecevie)
     }
 
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        mapChangedFromUserInteraction = mapViewRegionDidChangeFromUserInteraction()
-        if (mapChangedFromUserInteraction){
-            latCenter = String(mapView.centerCoordinate.latitude)
-            lngCenter = String(mapView.centerCoordinate.longitude)
-            choiceDataToLoadWhenUSerChangeRegion(list: listCheckBox, data: dataRecevie, lat: latCenter, lng: lngCenter)
-        }
+        latCenter = String(mapView.centerCoordinate.latitude)
+        lngCenter = String(mapView.centerCoordinate.longitude)
+        choiceDataToLoadWhenUSerChangeRegion(list: listCheckBox, data: dataRecevie, lat: latCenter, lng: lngCenter)
         
         print("STOP MOVE ALL \(count)")
         count = count + 1 // need fix
@@ -74,28 +86,13 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         mapsToShow.delegate = self
         mapsToShow.showsScale = true
         mapsToShow.showsUserLocation = true
-        let span = MKCoordinateSpan(latitudeDelta: 0.08, longitudeDelta: 0.08)
+        //let span = MKCoordinateSpan(latitudeDelta: 0.08, longitudeDelta: 0.08)
         let location = CLLocationCoordinate2D(latitude: Double(dataArray.lat)!, longitude: Double(dataArray.lng)!)
-        let region = MKCoordinateRegion(center: location, span: span)
-        mapsToShow.setRegion(region, animated: true)
+       // let region = MKCoordinateRegion(center: location, span: span)
+        //mapsToShow.setRegion(region, animated: false)
         let annotation = MKPointAnnotation()
         annotation.title = dataArray.name
         annotation.subtitle = dataArray.address
-        annotation.coordinate = location
-        annotations.append(annotation)
-        
-    }
-    func showNearLocation(lat: Double, lng: Double, name: String, address: String){
-        mapsToShow.delegate = self
-        mapsToShow.showsScale = true
-        mapsToShow.showsUserLocation = true
-        let span = MKCoordinateSpan(latitudeDelta: 0.08, longitudeDelta: 0.08)
-        let location = CLLocationCoordinate2D(latitude: lat, longitude: lng)
-        let region = MKCoordinateRegion(center: location, span: span)
-        mapsToShow.setRegion(region, animated: true)
-        let annotation = MKPointAnnotation()
-        annotation.title = name
-        annotation.subtitle = address
         annotation.coordinate = location
         annotations.append(annotation)
         
@@ -119,7 +116,6 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
                 let url = urlValue.urlImage
                 imageView.image = UIImage(imageView.downLoadFromUrlDemoSimple(urlSimple: url))
                 pinView?.leftCalloutAccessoryView = imageView
-
             }
             return pinView
         }
@@ -144,21 +140,12 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         }
         return false
     }
-
-    func showData(array: [ModelOfDirec]) {
-        for i in 0..<array.count {
-            showNearLocation(lat: Double(array[i].lat), lng: Double(array[i].lng), name: array[i].name, address: array[i].vicinity)
-        }
-        
-    }
     
     func choiceDataToShow(listChoice: [Int], dataRecevie: Int){
         if listChoice.count == 0{
-            //loadData(data: dataRecevie)
             loadDataToShowAlamo(data: dataRecevie)
         }else{
             for value in listChoice[0..<listChoice.count]{
-                //loadData(data: value)
                 loadDataToShowAlamo(data: value)
             }
         }
@@ -167,7 +154,6 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
     func choiceDataToLoadWhenUSerChangeRegion(list: [Int], data: Int , lat: String, lng: String ){
         if list.count == 0{
             loadDataregionDidChange(lat: lat, lng: lng, data: data)
-            //loadData(data: dataRecevie)
         }else{
             for value in list[0..<list.count]{
                 loadDataregionDidChange(lat: lat, lng: lng, data: value)
@@ -224,6 +210,7 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         loadDataAlamo(url: urlString)
     }
     
+    
     /*
     // MARK: - Navigation
 
@@ -261,6 +248,7 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         print(urlString)
         loadDataAlamo(url: urlString)
     }
+    
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         
