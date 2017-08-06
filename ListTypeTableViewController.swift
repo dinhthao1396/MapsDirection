@@ -19,6 +19,7 @@ class ListTypeTableViewController: UITableViewController, UITextFieldDelegate {
     var isCheckBox = false
     var dataFromButtonCheck  = Int()
     var dataRadius = ""
+    var dataRadiusa = ""
     var listAlamo = [ModelAlamofire]()
     //let textField = UITextField()
     
@@ -69,10 +70,14 @@ class ListTypeTableViewController: UITableViewController, UITextFieldDelegate {
     
     @IBAction func listButton(_ sender: UIButton) {
         dataToSendViaListButton = sender.tag
+        choiceRadius()
     }
+    
     @IBAction func maps(_ sender: UIButton) {
         dataToSend = sender.tag
+        choiceRadius()
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         listTypeView.delegate = self
@@ -97,37 +102,10 @@ class ListTypeTableViewController: UITableViewController, UITextFieldDelegate {
         textFieldRadius.resignFirstResponder()
         hideKeyboardWhenTappedAround() // keyboard don't hide
         textFieldRadius.clearsOnBeginEditing = true
- 
-
-
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
-//    var listAlamo = [ModelAlamofire]()
-//    func loadDataAlamo(url: String){
-//        
-//        
-//        Alamofire.request(url)
-//            .validate()
-//            .responseJSON{ response in
-//                
-//                if response.result.isSuccess {
-//                    print("JSON Link Available")
-//                }
-//                if let jsonData = response.result.value as? [String: Any] {
-//                    if  let results = jsonData["results"] as? [[String: Any]]{
-//                        for value in results {
-//                            let dataNameAdd = ModelAlamofire(JSON: value)
-//                            self.listAlamo.append(dataNameAdd!)
-//                        }
-//                        //print(self.listDemo)
-//                    }
-//                    OperationQueue.main.addOperation {
-//                        self.listTypeView.reloadData()
-//                    }
-//                }
-//        }
-//    }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
         textFieldRadius.resignFirstResponder() //don't work
@@ -137,6 +115,7 @@ class ListTypeTableViewController: UITableViewController, UITextFieldDelegate {
         textField.resignFirstResponder()
         return true
     }
+    
     func testListToShow(title: String, content: String){
         let alert = UIAlertController(title: title, message: content , preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: { (action) in
@@ -145,14 +124,32 @@ class ListTypeTableViewController: UITableViewController, UITextFieldDelegate {
         self.present(alert, animated:  true, completion: nil)
  
     }
+    func choiceRadius(){
+        textFieldRadius.resignFirstResponder()
+        let numInTextField = textFieldRadius.text
+        if let dataRadiusInt = Int(numInTextField!){
+            if dataRadiusInt >= 5000 || dataRadiusInt <= 200 {
+                testListToShow(title: "200 <= Radius <= 5000", content: "Please type again")
+            }else{
+                dataRadiusa = String(dataRadiusInt) //
+                print("data in textfield \(dataRadiusa)")
+                // sendRadiusToList
+                //performSegue(withIdentifier: "connectToListDetail", sender: self)
+            }
+        }
+        else{
+            testListToShow(title: "Radius must to be number", content: "Please enter radius again")
+        }
+        self.listTypeView.reloadData()
+    }
     
     
     func showChoice(){
         textFieldRadius.resignFirstResponder()
         let numInTextField = textFieldRadius.text
         if let dataRadiusInt = Int(numInTextField!){
-            if dataRadiusInt >= 5000 {
-                testListToShow(title: "Radius < 5000", content: "Please type again")
+            if dataRadiusInt >= 5000 || dataRadiusInt <= 1000 {
+                testListToShow(title: "1000 <= Radius <= 5000", content: "Please type again")
             }
             if listCheckBox.count == 0{
                 testListToShow(title: "Nothing To Show", content: "Please check some place you want to show")
@@ -160,19 +157,16 @@ class ListTypeTableViewController: UITableViewController, UITextFieldDelegate {
                 dataRadius = String(dataRadiusInt) //
                 print("data in textfield \(dataRadius)")
                 performSegue(withIdentifier: "showChoice", sender: self)
+                
                 //performSegue(withIdentifier: "connectToListDetail", sender: self)
             }
         }
         else{
             testListToShow(title: "Radius must to be number", content: "Please enter radius again")
         }
-
-        
         self.listTypeView.reloadData()
-        
-
-        
     }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -200,17 +194,21 @@ class ListTypeTableViewController: UITableViewController, UITextFieldDelegate {
         cell.setDataForCellType(name: nameTypeCell.nameType)
         return cell
     }
+    
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "connectToListDetail"){
             let secondViewController = segue.destination as! ListDetailTableViewController
             secondViewController.dataFromListType = self.dataToSendViaListButton
-            ///secondViewController.dataRadius = self.dataRadius
-            //self.dataRadius = ""
+            print("Chuan bi day data Radius \(dataRadiusa)")
+            secondViewController.dataRadius = self.dataRadiusa
+            self.dataRadiusa = ""
         }
         if (segue.identifier == "showMapsNear"){
             let nextViewController = segue.destination as! MapsNearbyViewController
             nextViewController.dataRecevie = self.dataToSend
-            print(dataToSend)
+            nextViewController.dataRadius = self.dataRadiusa
+            print(dataToSend + 1000)
         }
         if (segue.identifier == "showChoice"){
             let nextViewController = segue.destination as! MapsNearbyViewController
@@ -220,8 +218,6 @@ class ListTypeTableViewController: UITableViewController, UITextFieldDelegate {
             print(self.listCheckBox.count)
             self.listCheckBox.removeAll()
         }
-        
-       
     }
 
     /*

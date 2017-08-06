@@ -208,9 +208,18 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		180CE5051F36FBF8000D78EA /* Storyboard */ = {
+			isa = PBXGroup;
+			children = (
+				181342251F286EBB0064CFE5 /* Main.storyboard */,
+			);
+			name = Storyboard;
+			sourceTree = "<group>";
+		};
 		181342151F286EBB0064CFE5 = {
 			isa = PBXGroup;
 			children = (
+				180CE5051F36FBF8000D78EA /* Storyboard */,
 				1883A5731F30EA8A00ABDA45 /* Alamofire.xcodeproj */,
 				1851A56F1F29A2D1007DD7BE /* Model */,
 				1851A56C1F29A216007DD7BE /* Util */,
@@ -239,7 +248,6 @@
 			isa = PBXGroup;
 			children = (
 				181342211F286EBB0064CFE5 /* AppDelegate.swift */,
-				181342251F286EBB0064CFE5 /* Main.storyboard */,
 				181342281F286EBB0064CFE5 /* Assets.xcassets */,
 				1813422A1F286EBB0064CFE5 /* LaunchScreen.storyboard */,
 				1813422D1F286EBB0064CFE5 /* Info.plist */,
@@ -619,6 +627,7 @@
 				181342261F286EBB0064CFE5 /* Base */,
 			);
 			name = Main.storyboard;
+			path = MapsDemo;
 			sourceTree = "<group>";
 		};
 		1813422A1F286EBB0064CFE5 /* LaunchScreen.storyboard */ = {

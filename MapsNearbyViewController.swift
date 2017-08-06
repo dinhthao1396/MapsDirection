@@ -45,9 +45,7 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         mapsToShow.delegate = self
         mapsToShow.showsCompass = true
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Your Location", style: .plain, target: self, action: #selector(MapsNearbyViewController.comeback) )
-        //loadData()
         choiceDataToShow(listChoice: listCheckBox, dataRecevie: dataRecevie)
-        //dataRadius = ""
     }
 
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
@@ -113,7 +111,6 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
             let rightButton = UIButton(type: .detailDisclosure)
             let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
             pinView?.pinTintColor = UIColor.red
-            //pinView?.
             pinView?.isEnabled = true
             pinView?.animatesDrop = true
             pinView?.canShowCallout = true
@@ -154,6 +151,7 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         }
         
     }
+    
     func choiceDataToShow(listChoice: [Int], dataRecevie: Int){
         if listChoice.count == 0{
             //loadData(data: dataRecevie)
@@ -176,6 +174,7 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
             }
         }
     }
+    
     func loadDataAlamo(url: String){
         
         Alamofire.request(url)
@@ -220,62 +219,10 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
             urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=gas_station&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
         default:
             urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=restaurant&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
-            
         }
         
         loadDataAlamo(url: urlString)
     }
-
-//    func loadData(data: Int) {
-//        
-//        switch data {
-//        case 0:
-//            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=restaurant&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
-//        case 1:
-//            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=hospital&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
-//        case 2:
-//            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=school&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
-//        case 3:
-//            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=hotel&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
-//        case 4:
-//            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=museum&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
-//        case 5:
-//            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=atm&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
-//        case 6: urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=gas_station&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
-//        default:
-//            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=restaurant&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
-//        }
-//        print(urlString)
-//        let url = URL(string: urlString)
-//        
-//        URLSession.shared.dataTask(with:url!) { (data, response, error) in
-//            if error != nil {
-//                print("Some thing Wrong")
-//            } else
-//            {
-//                OperationQueue.main.addOperation{
-//                do {
-//                    let parsedData = try JSONSerialization.jsonObject(with: data!) as! [String:Any]
-//                    guard let topApps = TopApps(json: parsedData) else {return}
-//                    guard let appItem = topApps.results  else {return}
-//                    self.annotations.removeAll()
-//                    for i in 0..<appItem.count {
-//                        self.showNearLocation(lat: Double(appItem[i].lat), lng: Double(appItem[i].lng), name: appItem[i].name, address: appItem[i].vicinity)
-//                        let element = ModelOfAnnotationView(latModel: appItem[i].lat, lngModel: appItem[i].lng, nameModel: appItem[i].name, vicinityModel: appItem[i].vicinity, urlModel: appItem[i].urlIcon )
-//                        self.listToShow.append(element)
-//                    }
-//                    self.mapsToShow.addAnnotations(self.annotations)
-//                } catch let error as NSError {
-//                    print(error)
-//                }
-//                catch let someError as NSException{
-//                    print(someError)
-//                }
-//               //self.showData(array: self.listToShow)
-//                }
-//            }
-//            }.resume()
-//    }
     
     /*
     // MARK: - Navigation
@@ -313,33 +260,6 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         urlString = headOfUrl + locationOfUrl + tailOfUrl
         print(urlString)
         loadDataAlamo(url: urlString)
-
-//        let url = URL(string: urlString)
-//        //dataRadius = ""
-//        URLSession.shared.dataTask(with:url!) { (data, response, error) in
-//            if error != nil {
-//                print("Some thing Wrong ")
-//            } else
-//            {
-//                OperationQueue.main.addOperation{
-//                    do {
-//                        let parsedData = try JSONSerialization.jsonObject(with: data!) as! [String:Any]
-//                        guard let topApps = TopApps(json: parsedData) else {return}
-//                        guard let appItem = topApps.results  else {return}
-//                        self.annotations.removeAll()
-//                        for i in 0..<appItem.count {
-//                            self.showNearLocation(lat: Double(appItem[i].lat), lng: Double(appItem[i].lng), name: appItem[i].name, address: appItem[i].vicinity)
-//                        }
-//                        self.mapsToShow.addAnnotations(self.annotations)
-//                    } catch let error as NSError {
-//                        print(error)
-//                    }
-//                    catch let someError as NSException{
-//                        print(someError)
-//                    }
-//                }
-//            }
-//            }.resume()
     }
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
@@ -372,7 +292,6 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
     }
     
     func makeChoice(title: String){
-        //var numchoice = 0
         let alert = UIAlertController(title: title, message: nil, preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Details", style: .default, handler: MyDetails))
         alert.addAction(UIAlertAction(title: "Direction", style: .default, handler: MyDirections))
@@ -380,13 +299,13 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
             print("User cancel")
         }))
         self.present(alert, animated:  true, completion: nil)
-
-
     }
+    
     func MyDetails(alert: UIAlertAction){
         performSegue(withIdentifier: "showDetailsInMap", sender: self)
         print("Choice details")
     }
+    
     func MyDirections(alert: UIAlertAction){
         performSegue(withIdentifier: "showDirections", sender: self)
         print("Choice directions")
