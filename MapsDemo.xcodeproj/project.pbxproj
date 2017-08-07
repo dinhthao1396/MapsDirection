@@ -41,6 +41,7 @@
 		1899DC6B1F2A3D8800FA4F14 /* ListDetalCellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1899DC6A1F2A3D8800FA4F14 /* ListDetalCellTableViewCell.swift */; };
 		1899DC6D1F2A3DF300FA4F14 /* ListDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1899DC6C1F2A3DF300FA4F14 /* ListDetailModel.swift */; };
 		1899DC6F1F2A7AB300FA4F14 /* MapsNearbyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1899DC6E1F2A7AB300FA4F14 /* MapsNearbyViewController.swift */; };
+		18B8057E1F3870CB00AC0530 /* ModelLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18B8057D1F3870CB00AC0530 /* ModelLocation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -171,6 +172,7 @@
 		1899DC6A1F2A3D8800FA4F14 /* ListDetalCellTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListDetalCellTableViewCell.swift; sourceTree = "<group>"; };
 		1899DC6C1F2A3DF300FA4F14 /* ListDetailModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListDetailModel.swift; sourceTree = "<group>"; };
 		1899DC6E1F2A7AB300FA4F14 /* MapsNearbyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapsNearbyViewController.swift; sourceTree = "<group>"; };
+		18B8057D1F3870CB00AC0530 /* ModelLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelLocation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -219,8 +221,8 @@
 		181342151F286EBB0064CFE5 = {
 			isa = PBXGroup;
 			children = (
-				180CE5051F36FBF8000D78EA /* Storyboard */,
 				1883A5731F30EA8A00ABDA45 /* Alamofire.xcodeproj */,
+				180CE5051F36FBF8000D78EA /* Storyboard */,
 				1851A56F1F29A2D1007DD7BE /* Model */,
 				1851A56C1F29A216007DD7BE /* Util */,
 				1851A5651F299C34007DD7BE /* JSONData */,
@@ -338,6 +340,7 @@
 				1882DD731F3310B000919655 /* ModelToShowMoreDetail.swift */,
 				1886C0471F3436FA00497507 /* ModelOfAnnotationView.swift */,
 				1840A5271F363F5900646F7E /* ModelAlamofire.swift */,
+				18B8057D1F3870CB00AC0530 /* ModelLocation.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -558,6 +561,7 @@
 			files = (
 				1851A55E1F299C1F007DD7BE /* Encoder.swift in Sources */,
 				181342241F286EBB0064CFE5 /* DirectionViewController.swift in Sources */,
+				18B8057E1F3870CB00AC0530 /* ModelLocation.swift in Sources */,
 				1886C0481F3436FA00497507 /* ModelOfAnnotationView.swift in Sources */,
 				1851A55D1F299C1F007DD7BE /* Decoder.swift in Sources */,
 				1851A5601F299C1F007DD7BE /* ExtensionDecodable.swift in Sources */,

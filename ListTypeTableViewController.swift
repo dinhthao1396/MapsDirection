@@ -16,11 +16,9 @@ class ListTypeTableViewController: UITableViewController, UITextFieldDelegate {
     var dataToSendViaListButton = Int()
     var dataToSend = Int()
     var listCheckBox = [Int]()
-    var isCheckBox = false
     var dataFromButtonCheck  = Int()
     var dataRadius = ""
     var dataRadiusa = ""
-    var listAlamo = [ModelAlamofire]()
     //let textField = UITextField()
     
     @IBOutlet var listTypeView: UITableView!
@@ -102,6 +100,7 @@ class ListTypeTableViewController: UITableViewController, UITextFieldDelegate {
         textFieldRadius.resignFirstResponder()
         hideKeyboardWhenTappedAround() // keyboard don't hide
         textFieldRadius.clearsOnBeginEditing = true
+        
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
@@ -132,7 +131,7 @@ class ListTypeTableViewController: UITableViewController, UITextFieldDelegate {
                 testListToShow(title: "200 <= Radius <= 5000", content: "Please type again")
             }else{
                 dataRadiusa = String(dataRadiusInt) //
-                print("data in textfield \(dataRadiusa)")
+                //print("data in textfield \(dataRadiusa)")
                 // sendRadiusToList
                 //performSegue(withIdentifier: "connectToListDetail", sender: self)
             }
@@ -200,7 +199,7 @@ class ListTypeTableViewController: UITableViewController, UITextFieldDelegate {
         if (segue.identifier == "connectToListDetail"){
             let secondViewController = segue.destination as! ListDetailTableViewController
             secondViewController.dataFromListType = self.dataToSendViaListButton
-            print("Chuan bi day data Radius \(dataRadiusa)")
+            //print("Chuan bi day data Radius \(dataRadiusa)")
             secondViewController.dataRadius = self.dataRadiusa
             self.dataRadiusa = ""
         }
@@ -208,14 +207,14 @@ class ListTypeTableViewController: UITableViewController, UITextFieldDelegate {
             let nextViewController = segue.destination as! MapsNearbyViewController
             nextViewController.dataRecevie = self.dataToSend
             nextViewController.dataRadius = self.dataRadiusa
-            print(dataToSend + 1000)
+            //print(dataToSend + 1000)
         }
         if (segue.identifier == "showChoice"){
             let nextViewController = segue.destination as! MapsNearbyViewController
             nextViewController.listCheckBox = self.listCheckBox
             nextViewController.dataRadius = self.dataRadius
             self.dataRadius = ""
-            print(self.listCheckBox.count)
+            //print(self.listCheckBox.count)
             self.listCheckBox.removeAll()
         }
     }

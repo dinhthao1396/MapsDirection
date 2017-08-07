@@ -36,6 +36,7 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
     var dataRadius = ""
     var listCheckBox = [Int]()
     var listAlamo = [ModelAlamofire]()
+    var listTest = [ModelLocation]()
     var count = 0 // test did animataion
 
     private var mapChangedFromUserInteraction = false
@@ -60,16 +61,14 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         let location = CLLocationCoordinate2DMake(latitude, longitude)
         let region = MKCoordinateRegionMake(location, span)
         mapsToShow.setRegion(region, animated: false)
-        //choiceDataToShow(listChoice: listCheckBox, dataRecevie: dataRecevie)
     }
 
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         latCenter = String(mapView.centerCoordinate.latitude)
         lngCenter = String(mapView.centerCoordinate.longitude)
         choiceDataToLoadWhenUSerChangeRegion(list: listCheckBox, data: dataRecevie, lat: latCenter, lng: lngCenter)
-        
-        print("STOP MOVE ALL \(count)")
-        count = count + 1 // need fix
+        print("USER STOP MOVING \(count)")
+        count = count + 1 // done
     }
     
     func removeAnnotation(){
@@ -79,25 +78,47 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
     
     func comeback(){
         removeAnnotation()
-        choiceDataToShow(listChoice: listCheckBox, dataRecevie: dataRecevie)
+        let latitude:CLLocationDegrees = (locationManager.location?.coordinate.latitude)!
+        let longitude:CLLocationDegrees = (locationManager.location?.coordinate.longitude)!
+        let latDelta:CLLocationDegrees = 0.05
+        let lonDelta:CLLocationDegrees = 0.05
+        let span = MKCoordinateSpanMake(latDelta, lonDelta)
+        let location = CLLocationCoordinate2DMake(latitude, longitude)
+        let region = MKCoordinateRegionMake(location, span)
+        mapsToShow.setRegion(region, animated: false)
+        //choiceDataToShow(listChoice: listCheckBox, dataRecevie: dataRecevie)
         mapsToShow.reloadInputViews()
     }
-    func showNearLocationAlamo(dataArray: (ModelAlamofire)){
+//    func showNearLocationAlamoInButton(dataArray: [ModelLocation]){
+//        for value in dataArray {
+//        mapsToShow.delegate = self
+//        mapsToShow.showsScale = true
+//        mapsToShow.showsUserLocation = true
+//        let span = MKCoordinateSpan(latitudeDelta: 0.08, longitudeDelta: 0.08)
+//        let location = CLLocationCoordinate2D(latitude: Double(value.lat)!, longitude: Double(value.lng)!)
+//        let region = MKCoordinateRegion(center: location, span: span)
+//        mapsToShow.setRegion(region, animated: false)
+//        let annotation = MKPointAnnotation()
+//        annotation.title = value.name
+//        annotation.subtitle = value.address
+//        annotation.coordinate = location
+//        self.mapsToShow.addAnnotation(annotation)
+//        }
+//    }
+    func showNearLocationAlamoClosure(dataArray: [ModelLocation]){
+        for value in dataArray {
         mapsToShow.delegate = self
         mapsToShow.showsScale = true
         mapsToShow.showsUserLocation = true
-        //let span = MKCoordinateSpan(latitudeDelta: 0.08, longitudeDelta: 0.08)
-        let location = CLLocationCoordinate2D(latitude: Double(dataArray.lat)!, longitude: Double(dataArray.lng)!)
-       // let region = MKCoordinateRegion(center: location, span: span)
-        //mapsToShow.setRegion(region, animated: false)
+        let location = CLLocationCoordinate2D(latitude: Double(value.lat)!, longitude: Double(value.lng)!)
         let annotation = MKPointAnnotation()
-        annotation.title = dataArray.name
-        annotation.subtitle = dataArray.address
+        annotation.title = value.name
+        annotation.subtitle = value.address
         annotation.coordinate = location
-        annotations.append(annotation)
-        
+        self.mapsToShow.addAnnotation(annotation)
     }
     
+    }
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         let reuseId = "pin"
         var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
@@ -112,7 +133,7 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
             pinView?.animatesDrop = true
             pinView?.canShowCallout = true
             pinView?.rightCalloutAccessoryView = rightButton            
-            for urlValue in listAlamo[0..<listAlamo.count] {
+            for urlValue in listTest[0..<listTest.count] {
                 let url = urlValue.urlImage
                 imageView.image = UIImage(imageView.downLoadFromUrlDemoSimple(urlSimple: url))
                 pinView?.leftCalloutAccessoryView = imageView
@@ -129,24 +150,27 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         // Dispose of any resources that can be recreated.
     }
     
-    private func mapViewRegionDidChangeFromUserInteraction() -> Bool {
-        let view = self.mapsToShow.subviews[0]
-        if let gestureRecognizers = view.gestureRecognizers {
-            for recognizer in gestureRecognizers {
-                if(recognizer.state == UIGestureRecognizerState.ended ) {
-                    return true
-                }
-            }
-        }
-        return false
-    }
+//    private func mapViewRegionDidChangeFromUserInteraction() -> Bool {
+//        let view = self.mapsToShow.subviews[0]
+//        if let gestureRecognizers = view.gestureRecognizers {
+//            for recognizer in gestureRecognizers {
+//                if(recognizer.state == UIGestureRecognizerState.ended ) {
+//                    return true
+//                }
+//            }
+//        }
+//        return false
+//    }
     
     func choiceDataToShow(listChoice: [Int], dataRecevie: Int){
         if listChoice.count == 0{
-            loadDataToShowAlamo(data: dataRecevie)
+            //loadDataToShowAlamo(data: dataRecevie)
+            loadDataToShowAlamoClosure(data: dataRecevie)
+            
         }else{
             for value in listChoice[0..<listChoice.count]{
-                loadDataToShowAlamo(data: value)
+                //loadDataToShowAlamo(data: value)
+                loadDataToShowAlamoClosure(data: value)
             }
         }
     }
@@ -161,33 +185,58 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         }
     }
     
-    func loadDataAlamo(url: String){
-        
-        Alamofire.request(url)
-            .validate()
-            .responseJSON{ response in
-                
-                if response.result.isSuccess {
-                    print("JSON Link Available")
-                }
-                OperationQueue.main.addOperation{
-                if let jsonData = response.result.value as? [String: Any] {
-                    if  let results = jsonData["results"] as? [[String: Any]]{
-                        self.annotations.removeAll()
-                            for value in results[0..<results.count] {
-                                let data = ModelAlamofire(JSON: value)
-                                self.showNearLocationAlamo(dataArray: data!)
-                                let dataNameAdd = ModelAlamofire(JSON: value)
-                                self.listAlamo.append(dataNameAdd!)
-                            }
-                        self.mapsToShow.addAnnotations(self.annotations)
-                    }
-                }
-            }
-        }
-    }
+//    func loadDataAlamo(url: String){
+//        
+//        Alamofire.request(url)
+//            .validate()
+//            .responseJSON{ response in
+//                
+//                if response.result.isSuccess {
+//                    print("JSON Link Available")
+//                }
+//                OperationQueue.main.addOperation{
+//                if let jsonData = response.result.value as? [String: Any] {
+//                    if  let results = jsonData["results"] as? [[String: Any]]{
+//                        self.annotations.removeAll()
+//                            for value in results[0..<results.count] {
+//                                let data = ModelAlamofire(JSON: value)
+//                                self.showNearLocationAlamo(dataArray: data!)
+//                                let dataNameAdd = ModelAlamofire(JSON: value)
+//                                self.listAlamo.append(dataNameAdd!)
+//                            }
+//                        self.mapsToShow.addAnnotations(self.annotations)
+//                    }
+//                }
+//            }
+//        }
+//    }
     
-    func loadDataToShowAlamo(data: Int){
+//    func loadDataToShowAlamo(data: Int){
+//        switch data {
+//        case 0:
+//            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=restaurant&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+//        case 1:
+//            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=hospital&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+//        case 2:
+//            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=school&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+//        case 3:
+//            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=hotel&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+//        case 4:
+//            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=museum&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+//        case 5:
+//            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=atm&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+//        case 6:
+//            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=gas_station&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+//        default:
+//            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=restaurant&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+//        }
+//        
+//        loadDataAlamo(url: urlString)
+//        
+//        
+//    }
+    
+    func loadDataToShowAlamoClosure(data: Int){
         switch data {
         case 0:
             urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=restaurant&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
@@ -207,8 +256,14 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
             urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=restaurant&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
         }
         
-        loadDataAlamo(url: urlString)
+        getDataAlamofireClosureView(url: urlString) { (listData) in
+            self.listTest = listData
+            print("aaaaaaaaaaaaaaaaaa")
+            print(self.listTest.count)
+            self.showNearLocationAlamoClosure(dataArray: self.listTest)
+        }
     }
+
     
     
     /*
@@ -246,7 +301,13 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         locationOfUrl = "\(lat)" + "," + "\(lng)"
         urlString = headOfUrl + locationOfUrl + tailOfUrl
         print(urlString)
-        loadDataAlamo(url: urlString)
+        //loadDataAlamo(url: urlString)
+        getDataAlamofireClosureView(url: urlString) { (listData) in
+            self.listTest = listData
+            print("Region change")
+            print(self.listTest.count)
+            self.showNearLocationAlamoClosure(dataArray: self.listTest)
+        }
     }
     
     

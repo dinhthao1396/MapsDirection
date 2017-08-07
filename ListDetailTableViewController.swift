@@ -21,7 +21,7 @@ class ListDetailTableViewController: UITableViewController {
     var dataToSendLat = Float()
     var dataToSendLng = Float()
     var dataRadius = ""
-    var listAlamo = [ModelAlamofire]()
+    var listAlamoClosure = [ModelLocation]()
     var refreshControlJSON : UIRefreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
@@ -41,39 +41,6 @@ class ListDetailTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
-    }
-   
-    func loadDataAlamo(url: String){
-  
-        Alamofire.request(url)
-            .validate()
-            .responseJSON{ response in
-                
-                if response.result.isSuccess {
-                    print("JSON Link Available")
-                }
-                if let jsonData = response.result.value as? [String: Any] {
-                    if  let results = jsonData["results"] as? [[String: Any]]{
-                        if self.tempEnd <= results.count {
-                        for value in results[self.tempStar...self.tempEnd] {
-                            let dataNameAdd = ModelAlamofire(JSON: value)
-                            self.listAlamo.append(dataNameAdd!)
-                        }
-                    }
-                        self.tempStar = self.tempEnd + 1
-                        self.tempEnd = self.tempEnd + 5
-                    if (self.listAlamo.count == results.count){
-                        self.indicatorJSON.stopAnimating()
-                        self.indicatorJSON.hidesWhenStopped = true
-                        }
-                    
-                    }
-                OperationQueue.main.addOperation {
-                    self.listDetailJSON.reloadData()
-                }
-            }
-                
-        }
     }
     
     func loadDataToShowAlamo(){
@@ -98,13 +65,16 @@ class ListDetailTableViewController: UITableViewController {
             }
         print("I am printing from loadDataAlamo")
         print(urlString)
-        loadDataAlamo(url: urlString)
+        //loadDataAlamo(url: urlString)
+        getDataAlamofireClosure(url: urlString) { (listData) in
+            self.listAlamoClosure = listData
+        }
     }
     
     func refreshData(){
         self.tempStar = 0
         self.tempEnd = 4
-        self.listAlamo.removeAll()
+        self.listAlamoClosure.removeAll()
         loadDataToShowAlamo()
         listDetailJSON.reloadData()
         refreshControlJSON.endRefreshing()
@@ -135,7 +105,6 @@ class ListDetailTableViewController: UITableViewController {
         if maxOfset - currentOfSet <= 10 {
             print("load more data")
             indicatorJSON.startAnimating()
-            //self.loadData()
             self.loadDataToShowAlamo()
         }
     }
@@ -155,18 +124,21 @@ class ListDetailTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         //print(self.listJSON.count)
-        return listAlamo.count
+        return listAlamoClosure.count
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellJSON", for: indexPath) as! ListDetalCellTableViewCell
-        let element = listAlamo[indexPath.row]
+        let element = listAlamoClosure[indexPath.row]
         dataToSendLat = Float(element.lat)!
         dataToSendLng = Float(element.lng)!
         cell.setDataDetailForCell(name: element.name, address: element.address)
         // Configure the cell...
         return cell
+        
+        
+        
     }
  
 
