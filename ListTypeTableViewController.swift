@@ -19,8 +19,6 @@ class ListTypeTableViewController: UITableViewController, UITextFieldDelegate {
     var dataFromButtonCheck  = Int()
     var dataRadius = ""
     var dataRadiusa = ""
-    //let textField = UITextField()
-    
     @IBOutlet var listTypeView: UITableView!
     
     
@@ -38,14 +36,12 @@ class ListTypeTableViewController: UITableViewController, UITextFieldDelegate {
                 for value in listCheckBox[0..<listCheckBox.count]{
                     if value == dataFromButtonCheck {
                         sum = sum + 1
-                        //listCheckBox.append(dataFromButtonCheck)
                     }
                 }
                 if sum == 0{
                     listCheckBox.append(dataFromButtonCheck)
                 }
             }
-            print("User choice \(sender.tag)")
             sender.isSelected = false
         }else{
             var sum = 0
@@ -63,8 +59,6 @@ class ListTypeTableViewController: UITableViewController, UITextFieldDelegate {
         }
         print(listCheckBox.count)
     }
-    
- 
     
     @IBAction func listButton(_ sender: UIButton) {
         dataToSendViaListButton = sender.tag
@@ -98,7 +92,9 @@ class ListTypeTableViewController: UITableViewController, UITextFieldDelegate {
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Show", style: .plain, target: self, action: #selector(ListTypeTableViewController.showChoice))
         textFieldRadius.resignFirstResponder()
+        
         hideKeyboardWhenTappedAround() // keyboard don't hide
+        
         textFieldRadius.clearsOnBeginEditing = true
         
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
@@ -131,9 +127,6 @@ class ListTypeTableViewController: UITableViewController, UITextFieldDelegate {
                 testListToShow(title: "200 <= Radius <= 5000", content: "Please type again")
             }else{
                 dataRadiusa = String(dataRadiusInt) //
-                //print("data in textfield \(dataRadiusa)")
-                // sendRadiusToList
-                //performSegue(withIdentifier: "connectToListDetail", sender: self)
             }
         }
         else{
@@ -141,7 +134,6 @@ class ListTypeTableViewController: UITableViewController, UITextFieldDelegate {
         }
         self.listTypeView.reloadData()
     }
-    
     
     func showChoice(){
         textFieldRadius.resignFirstResponder()
@@ -156,8 +148,6 @@ class ListTypeTableViewController: UITableViewController, UITextFieldDelegate {
                 dataRadius = String(dataRadiusInt) //
                 print("data in textfield \(dataRadius)")
                 performSegue(withIdentifier: "showChoice", sender: self)
-                
-                //performSegue(withIdentifier: "connectToListDetail", sender: self)
             }
         }
         else{
@@ -194,12 +184,10 @@ class ListTypeTableViewController: UITableViewController, UITextFieldDelegate {
         return cell
     }
     
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "connectToListDetail"){
             let secondViewController = segue.destination as! ListDetailTableViewController
             secondViewController.dataFromListType = self.dataToSendViaListButton
-            //print("Chuan bi day data Radius \(dataRadiusa)")
             secondViewController.dataRadius = self.dataRadiusa
             self.dataRadiusa = ""
         }
@@ -207,14 +195,12 @@ class ListTypeTableViewController: UITableViewController, UITextFieldDelegate {
             let nextViewController = segue.destination as! MapsNearbyViewController
             nextViewController.dataRecevie = self.dataToSend
             nextViewController.dataRadius = self.dataRadiusa
-            //print(dataToSend + 1000)
         }
         if (segue.identifier == "showChoice"){
             let nextViewController = segue.destination as! MapsNearbyViewController
             nextViewController.listCheckBox = self.listCheckBox
             nextViewController.dataRadius = self.dataRadius
             self.dataRadius = ""
-            //print(self.listCheckBox.count)
             self.listCheckBox.removeAll()
         }
     }

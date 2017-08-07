@@ -61,16 +61,55 @@ class ListDetailTableViewController: UITableViewController {
                 urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=gas_station&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
             default:
                 urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=restaurant&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
-                
             }
-        print("I am printing from loadDataAlamo")
         print(urlString)
-        //loadDataAlamo(url: urlString)
         getDataAlamofireClosure(url: urlString) { (listData) in
-            self.listAlamoClosure = listData
+            print("Do Dai Cua List \(listData.count)")
+            if listData.count <= 8 {
+                
+                self.listAlamoClosure = listData
+                self.warningToShow(title: "Data too little", content: "You should choice radius larger")
+            }
+            if self.listAlamoClosure.count < listData.count && listData.count > 8{
+                for value in listData[self.tempStar...self.tempEnd] {
+                    self.listAlamoClosure.append(value)
+                }
+                
+                let tempSub = listData.count - (self.tempEnd + 1)
+                if tempSub > 5 {
+                    self.tempStar = self.tempEnd + 1
+                    self.tempEnd = self.tempEnd + 5
+                    }
+                if tempSub <= 5 {
+                    self.tempStar = self.tempEnd + 1
+                    self.tempEnd = self.tempEnd + (tempSub)
+                }
+            }
+
+            if self.listAlamoClosure.count == listData.count {
+                self.indicatorJSON.hidesWhenStopped = true
+                self.indicatorJSON.stopAnimating()
+                    
+            }
         }
     }
     
+    func warningToShow(title: String, content: String){
+        let alert = UIAlertController(title: title, message: content , preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: { (action) in
+            print("Choice Radius")
+        }))
+        self.present(alert, animated:  true, completion: nil)
+        
+    }
+    //                let tempSub = listData.count - self.tempEnd
+    //                if (tempSub < 5){
+    //                    self.tempStar = self.tempEnd + 1
+    //                    self.tempEnd = self.tempEnd + tempSub
+    //                }else{
+    //                    self.tempStar = self.tempEnd + 1
+    //                    self.tempEnd = self.tempEnd + 5
+    //                }
     func refreshData(){
         self.tempStar = 0
         self.tempEnd = 4
@@ -101,7 +140,7 @@ class ListDetailTableViewController: UITableViewController {
     
     override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         let currentOfSet = scrollView.contentOffset.y
-        let maxOfset = scrollView.contentSize.height - scrollView.frame.size.height // wrong
+        let maxOfset = scrollView.contentSize.height - scrollView.frame.size.height 
         if maxOfset - currentOfSet <= 10 {
             print("load more data")
             indicatorJSON.startAnimating()
@@ -134,7 +173,6 @@ class ListDetailTableViewController: UITableViewController {
         dataToSendLat = Float(element.lat)!
         dataToSendLng = Float(element.lng)!
         cell.setDataDetailForCell(name: element.name, address: element.address)
-        // Configure the cell...
         return cell
         
         
