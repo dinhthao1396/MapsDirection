@@ -63,7 +63,7 @@ class ListDetailTableViewController: UITableViewController {
                 urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=restaurant&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
             }
         print(urlString)
-        getDataAlamofireClosure(url: urlString) { (listData) in
+        getDataAlamofireClosure(url: urlString) { (listData, succesDara, errorData ) in
             print("Do Dai Cua List \(listData.count)")
             if listData.count <= 8 {
                 
@@ -91,6 +91,9 @@ class ListDetailTableViewController: UITableViewController {
                 self.indicatorJSON.stopAnimating()
                     
             }
+            print("Results")
+            print(succesDara)
+            print(errorData)
         }
     }
     
@@ -102,14 +105,7 @@ class ListDetailTableViewController: UITableViewController {
         self.present(alert, animated:  true, completion: nil)
         
     }
-    //                let tempSub = listData.count - self.tempEnd
-    //                if (tempSub < 5){
-    //                    self.tempStar = self.tempEnd + 1
-    //                    self.tempEnd = self.tempEnd + tempSub
-    //                }else{
-    //                    self.tempStar = self.tempEnd + 1
-    //                    self.tempEnd = self.tempEnd + 5
-    //                }
+    
     func refreshData(){
         self.tempStar = 0
         self.tempEnd = 4

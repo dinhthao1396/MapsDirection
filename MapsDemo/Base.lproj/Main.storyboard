@@ -64,7 +64,7 @@
                                             <state key="normal" backgroundImage="uncheckbox12"/>
                                             <state key="selected" backgroundImage="uncheckbox12"/>
                                             <connections>
-                                                <action selector="clickToCheck:" destination="POE-Qd-lrE" eventType="touchUpInside" id="QuG-9n-MF8"/>
+                                                <action selector="checkBoxAction:" destination="7eV-hU-P5g" eventType="touchUpInside" id="0do-M7-DZ0"/>
                                             </connections>
                                         </button>
                                     </subviews>

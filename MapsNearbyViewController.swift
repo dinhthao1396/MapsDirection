@@ -166,9 +166,11 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
             urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=restaurant&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
         }
         
-        getDataAlamofireClosureView(url: urlString) { (listData) in
+        getDataAlamofireClosureView(url: urlString) { (listData, successData, errorData) in
             self.listTest = listData
-            print("aaaaaaaaaaaaaaaaaa")
+            print("Result")
+            print(successData)
+            print(errorData)
             print(self.listTest.count)
             self.showNearLocationAlamoClosure(dataArray: self.listTest)
         }
@@ -211,8 +213,10 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         locationOfUrl = "\(lat)" + "," + "\(lng)"
         urlString = headOfUrl + locationOfUrl + tailOfUrl
         print(urlString)
-        getDataAlamofireClosureView(url: urlString) { (listData) in
+        getDataAlamofireClosureView(url: urlString) { (listData, successData, errorData) in
             self.listTest = listData
+            print(successData)
+            print(errorData)
             print("Region change")
             print(self.listTest.count)
             self.showNearLocationAlamoClosure(dataArray: self.listTest)

@@ -18,47 +18,10 @@ class ListTypeTableViewController: UITableViewController, UITextFieldDelegate {
     var listCheckBox = [Int]()
     var dataFromButtonCheck  = Int()
     var dataRadius = ""
+    var changedFromUserInteraction = false
     var dataRadiusa = ""
+    
     @IBOutlet var listTypeView: UITableView!
-    
-    
-    
-    @IBAction func clickToCheck(_ sender: UIButton) {
-        dataFromButtonCheck = sender.tag
-        
-        if (sender.isSelected == true){
-            var sum = 0
-            sender.setBackgroundImage(UIImage(named: "checkbox12"), for: UIControlState.normal)
-            if listCheckBox.count == 0 {
-                listCheckBox.append(dataFromButtonCheck)
-            }
-            else{
-                for value in listCheckBox[0..<listCheckBox.count]{
-                    if value == dataFromButtonCheck {
-                        sum = sum + 1
-                    }
-                }
-                if sum == 0{
-                    listCheckBox.append(dataFromButtonCheck)
-                }
-            }
-            sender.isSelected = false
-        }else{
-            var sum = 0
-            sender.setBackgroundImage(UIImage(named: "uncheckbox12"), for: UIControlState.normal)
-            if listCheckBox.count > 0 {
-                for i in 0..<listCheckBox.count {
-                    if dataFromButtonCheck == listCheckBox[i] {
-                        sum = sum + i
-                    }
-                    
-                }
-                listCheckBox.remove(at: sum)
-            }
-            sender.isSelected = true //Background
-        }
-        print(listCheckBox.count)
-    }
     
     @IBAction func listButton(_ sender: UIButton) {
         dataToSendViaListButton = sender.tag
@@ -91,25 +54,51 @@ class ListTypeTableViewController: UITableViewController, UITextFieldDelegate {
         listType.append(element7)
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Show", style: .plain, target: self, action: #selector(ListTypeTableViewController.showChoice))
-        textFieldRadius.resignFirstResponder()
-        
-        hideKeyboardWhenTappedAround() // keyboard don't hide
         
         textFieldRadius.clearsOnBeginEditing = true
+        listTypeView.keyboardDismissMode = .onDrag
+        
+//        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UITableViewController.dismissKeyboard))
+//        tap.cancelsTouchesInView = false
+//        listTypeView.addGestureRecognizer(tap)
+        
+        textFieldRadius.resignFirstResponder()
+        textFieldRadius.clearsOnBeginEditing = true
+
+        let hideKeyboard = UITapGestureRecognizer(target: self, action: #selector(ListTypeTableViewController.navigationBarTap))
+        hideKeyboard.numberOfTapsRequired = 1
+        navigationController?.navigationBar.addGestureRecognizer(hideKeyboard)  // back button lowly
+        
+    
         
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-        textFieldRadius.resignFirstResponder() //don't work
+    func navigationBarTap(_ recognizer: UIGestureRecognizer) {
+        textFieldRadius.endEditing(true)
     }
+    
+//    func dismissKeyboard(_ recognizer: UIGestureRecognizer) {
+//        
+//        textFieldRadius.endEditing(true)
+//    }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
+        textFieldRadius.resignFirstResponder()
+        self.view.endEditing(true)
+        textFieldRadius.endEditing(true)
+        
+        }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
+    
+
+
     
     func testListToShow(title: String, content: String){
         let alert = UIAlertController(title: title, message: content , preferredStyle: .alert)
@@ -181,6 +170,34 @@ class ListTypeTableViewController: UITableViewController, UITextFieldDelegate {
         cell.checkBox.tag = indexPath.row
         let nameTypeCell = listType[indexPath.row]
         cell.setDataForCellType(name: nameTypeCell.nameType)
+        cell.tapToCheck = { [unowned self] (selectedCell) -> Void in
+            print("the selected item is \(indexPath.row)")
+            let dataInCell = indexPath.row
+            if self.listCheckBox.contains(dataInCell){
+                print("Data co roi")
+            }else{
+                self.listCheckBox.append(dataInCell)
+            }
+            print("Data khi check, phan tu trong \(self.listCheckBox.count)")
+            print(self.listCheckBox)
+
+        }
+        cell.tapToUnCheck = { [unowned self] (selectedCell) -> Void in
+            let dataInCell = indexPath.row
+            var sum = 0
+            if self.listCheckBox.contains(dataInCell){
+                for i in 0..<self.listCheckBox.count {
+                 if dataInCell == self.listCheckBox[i] {
+                    sum = sum + i
+                   }
+                                            }
+                self.listCheckBox.remove(at: sum)
+            }else{
+                print("Do Nothing")
+            }
+            print("List khi uncheck \(self.listCheckBox.count)")
+            print(self.listCheckBox)
+        }
         return cell
     }
     

@@ -30,14 +30,14 @@ extension UIImageView {
         view.addGestureRecognizer(tap)
     }
     
-    func dismissKeyboard() {
+    func dismissKeyboard(sender: UITapGestureRecognizer? = nil) {
         view.endEditing(true)
     }
  }
  
  extension UITableViewController{
     
- func getDataAlamofireClosure(url: String, completion: @escaping ([ModelLocation]) -> Void){
+ func getDataAlamofireClosure(url: String, completion: @escaping ([ModelLocation], String,String) -> Void){
     
     Alamofire.request(url)
         .validate()
@@ -46,16 +46,18 @@ extension UIImageView {
             if response.result.isSuccess {
                 print("JSON Link Available")
             }else{
-                print("Data From Link Not Available")
                 print("Error: \(String(describing: response.result.error))")
-                completion([ModelLocation]())
+                let errorGetData = String(describing: response.result.error!)
+                let successGetData = "NOT SUCCESS"
+                completion([ModelLocation](), successGetData, errorGetData)
                 return
             }
             
             guard let jsonData = response.result.value as? [String: Any],
                 let results = jsonData["results"] as? [[String: Any]] else {
-                    print("Data Not Available")
-                    completion([ModelLocation]())
+                    let errorGetData = String(describing: response.result.error!)
+                    let successGetData = "NOT SUCCESS"
+                    completion([ModelLocation](), successGetData, errorGetData)
                     return
             }
             
@@ -70,7 +72,9 @@ extension UIImageView {
                 return ModelLocation(name: name, address: address, lat: Float(lat), lng: Float(lng), url: urlImage)
                 
             })
-            completion(list)
+            let errorGetData = "NO ERROR"
+            let successGetData = "SUCCES"
+            completion(list, successGetData, errorGetData)
             self.tableView.reloadData()
     }
     
@@ -79,7 +83,7 @@ extension UIImageView {
 
  extension UIViewController{
     
-    func getDataAlamofireClosureView(url: String, completion: @escaping ([ModelLocation]) -> Void){
+    func getDataAlamofireClosureView(url: String, completion: @escaping ([ModelLocation], String, String) -> Void){
         
         Alamofire.request(url)
             .validate()
@@ -88,16 +92,18 @@ extension UIImageView {
                 if response.result.isSuccess {
                     print("JSON Link Available")
                 }else{
-                    print("Data From Link Not Available")
                     print("Error: \(String(describing: response.result.error))")
-                    completion([ModelLocation]())
+                    let errorGetData = String(describing: response.result.error!)
+                    let successGetData = "NOT SUCCESS"
+                    completion([ModelLocation](), successGetData, errorGetData)
                     return
                 }
                 
                 guard let jsonData = response.result.value as? [String: Any],
                     let results = jsonData["results"] as? [[String: Any]] else {
-                        print("Data Not Available")
-                        completion([ModelLocation]())
+                        let errorGetData = String(describing: response.result.error!)
+                        let successGetData = "NOT SUCCESS"
+                        completion([ModelLocation](), successGetData, errorGetData)
                         return
                 }
                 
@@ -112,7 +118,9 @@ extension UIImageView {
                     return ModelLocation(name: name, address: address, lat: Float(lat), lng: Float(lng), url: urlImage)
                     
                 })
-                completion(list)
+                let errorGetData = "NO ERROR"
+                let successGetData = "SUCCESS"
+                completion(list, successGetData, errorGetData)
                 self.view.reloadInputViews()
         }
         
