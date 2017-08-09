@@ -29,6 +29,7 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
     var lngPinLocation = ""
     var dataRadius = ""
     var listCheckBox = [Int]()
+    var urlShow = ""
     var listTest = [ModelLocation]()
     var countRegionChange = 0
     
@@ -36,7 +37,7 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         super.viewDidLoad()
         mapsToShow.delegate = self
         mapsToShow.showsCompass = true
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Your Location", style: .plain, target: self, action: #selector(MapsNearbyViewController.comeback) )
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "My Location", style: .plain, target: self, action: #selector(MapsNearbyViewController.comeback) )
         locationManager.requestAlwaysAuthorization()
         locationManager.requestWhenInUseAuthorization()
         if CLLocationManager.locationServicesEnabled() {
@@ -58,7 +59,7 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         removeAnnotation()
         latCenter = String(mapView.centerCoordinate.latitude)
         lngCenter = String(mapView.centerCoordinate.longitude)
-        
+        self.listTest.removeAll()
         choiceDataToLoadWhenUSerChangeRegion(list: listCheckBox, data: dataRecevie, lat: latCenter, lng: lngCenter)
         print("USER STOP MOVING \(countRegionChange)")
         countRegionChange = countRegionChange + 1 // done
@@ -109,10 +110,11 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
             pinView?.canShowCallout = true
             pinView?.rightCalloutAccessoryView = rightButton            
             for urlValue in listTest[0..<listTest.count] {
-                let url = urlValue.urlImage
-                imageView.image = UIImage(imageView.downLoadFromUrlDemoSimple(urlSimple: url))
-                pinView?.leftCalloutAccessoryView = imageView
+                urlShow = urlValue.urlImage
+                print(urlShow)
             }
+            imageView.image = UIImage(imageView.downLoadFromUrlDemoSimple(urlSimple: urlShow))
+            pinView?.leftCalloutAccessoryView = imageView
             return pinView
         }
         else {

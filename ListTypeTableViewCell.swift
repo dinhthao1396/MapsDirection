@@ -20,15 +20,26 @@ class ListTypeTableViewCell: UITableViewCell {
         if (sender.isSelected == true){
             sender.setBackgroundImage(UIImage(named: "checkbox12"), for: UIControlState.normal)
             tapToCheck?(self)
+            testToCheck(sender.isSelected)
+
             sender.isSelected = false
         }else{
             sender.setBackgroundImage(UIImage(named: "uncheckbox12"), for: UIControlState.normal)
+            testToUnCheck(sender.isSelected)
             sender.isSelected = true
             tapToUnCheck?(self)
+            
         }
     }
     var tapToCheck: ((ListTypeTableViewCell) -> Void)?
     var tapToUnCheck: ((ListTypeTableViewCell) -> Void)?
+    
+    var testToCheck = { (dataBool: Bool) -> Void in
+        
+    }
+    var testToUnCheck = { (dataBool: Bool) -> Void in
+        
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()

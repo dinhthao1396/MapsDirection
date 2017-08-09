@@ -97,9 +97,6 @@ class ListTypeTableViewController: UITableViewController, UITextFieldDelegate {
         return true
     }
     
-
-
-    
     func testListToShow(title: String, content: String){
         let alert = UIAlertController(title: title, message: content , preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: { (action) in
@@ -108,6 +105,7 @@ class ListTypeTableViewController: UITableViewController, UITextFieldDelegate {
         self.present(alert, animated:  true, completion: nil)
  
     }
+    
     func choiceRadius(){
         textFieldRadius.resignFirstResponder()
         let numInTextField = textFieldRadius.text
@@ -131,7 +129,7 @@ class ListTypeTableViewController: UITableViewController, UITextFieldDelegate {
             if dataRadiusInt >= 5000 || dataRadiusInt <= 1000 {
                 testListToShow(title: "1000 <= Radius <= 5000", content: "Please type again")
             }
-            if listCheckBox.count == 0{
+            if listCheckBox.count == 0 {
                 testListToShow(title: "Nothing To Show", content: "Please check some place you want to show")
             }else{
                 dataRadius = String(dataRadiusInt) //
@@ -170,34 +168,68 @@ class ListTypeTableViewController: UITableViewController, UITextFieldDelegate {
         cell.checkBox.tag = indexPath.row
         let nameTypeCell = listType[indexPath.row]
         cell.setDataForCellType(name: nameTypeCell.nameType)
-        cell.tapToCheck = { [unowned self] (selectedCell) -> Void in
+//        cell.tapToCheck = { _ -> Void in        // [unowned self] (selectedCell)
+//            print("the selected item is \(indexPath.row)")
+//            let dataInCell = indexPath.row
+//            if self.listCheckBox.contains(dataInCell){
+//                print("Data co roi")
+//            }else{
+//                self.listCheckBox.append(dataInCell)
+//            }
+//            print("Data khi check, phan tu trong \(self.listCheckBox.count)")
+//            print(self.listCheckBox)
+//
+//        }
+//        cell.tapToUnCheck = { _ -> Void in
+//            let dataInCell = indexPath.row
+//            var sum = 0
+//            if self.listCheckBox.contains(dataInCell){
+//                for i in 0..<self.listCheckBox.count {
+//                 if dataInCell == self.listCheckBox[i] {
+//                    sum = sum + i
+//                   }
+//                                            }
+//                self.listCheckBox.remove(at: sum)
+//            }else{
+//                print("Do Nothing")
+//            }
+//            print("List khi uncheck \(self.listCheckBox.count)")
+//            print(self.listCheckBox)
+//        }
+        cell.testToCheck = { data in
+            print(data)
+            print("Print from testCheck")
             print("the selected item is \(indexPath.row)")
             let dataInCell = indexPath.row
             if self.listCheckBox.contains(dataInCell){
-                print("Data co roi")
+                print("Array already has data")
             }else{
                 self.listCheckBox.append(dataInCell)
             }
-            print("Data khi check, phan tu trong \(self.listCheckBox.count)")
+            print("Element in data: \(self.listCheckBox.count)")
             print(self.listCheckBox)
-
+            
         }
-        cell.tapToUnCheck = { [unowned self] (selectedCell) -> Void in
+        cell.testToUnCheck = { data in
+            print(data)
+            print("Print from testUnCheck")
             let dataInCell = indexPath.row
             var sum = 0
             if self.listCheckBox.contains(dataInCell){
                 for i in 0..<self.listCheckBox.count {
-                 if dataInCell == self.listCheckBox[i] {
-                    sum = sum + i
-                   }
-                                            }
+                    if dataInCell == self.listCheckBox[i] {
+                        sum = sum + i
+                    }
+                }
                 self.listCheckBox.remove(at: sum)
             }else{
                 print("Do Nothing")
             }
             print("List khi uncheck \(self.listCheckBox.count)")
             print(self.listCheckBox)
+            
         }
+
         return cell
     }
     
