@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import UIKit
+import MapKit
 struct ModelLocation {
     var address = ""
     var name = ""
@@ -19,5 +21,19 @@ struct ModelLocation {
         self.urlImage = url
         self.lat = String(lat)
         self.lng = String(lng)
+    }
+}
+
+class ArrayLocation : NSObject, MKAnnotation {
+    var coordinate: CLLocationCoordinate2D
+    var title: String?
+    var subtitle: String?
+    var image: UIImage?
+    var url: String?
+    init(coordinate: CLLocationCoordinate2D, title: String, subtitle: String, url: String) {
+        self.coordinate = coordinate
+        self.title = title
+        self.subtitle = subtitle
+        self.url = url
     }
 }

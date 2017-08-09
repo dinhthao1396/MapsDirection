@@ -168,6 +168,7 @@ class ListTypeTableViewController: UITableViewController, UITextFieldDelegate {
         cell.checkBox.tag = indexPath.row
         let nameTypeCell = listType[indexPath.row]
         cell.setDataForCellType(name: nameTypeCell.nameType)
+        
 //        cell.tapToCheck = { _ -> Void in        // [unowned self] (selectedCell)
 //            print("the selected item is \(indexPath.row)")
 //            let dataInCell = indexPath.row
@@ -196,6 +197,7 @@ class ListTypeTableViewController: UITableViewController, UITextFieldDelegate {
 //            print("List khi uncheck \(self.listCheckBox.count)")
 //            print(self.listCheckBox)
 //        }
+        
         cell.testToCheck = { data in
             print(data)
             print("Print from testCheck")

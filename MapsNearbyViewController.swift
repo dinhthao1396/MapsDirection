@@ -30,7 +30,6 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
     var dataRadius = ""
     var listCheckBox = [Int]()
     var urlShow = ""
-    var listTest = [ModelLocation]()
     var countRegionChange = 0
     
     override func viewDidLoad() {
@@ -45,6 +44,7 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
             locationManager.desiredAccuracy = kCLLocationAccuracyBest
             locationManager.startUpdatingLocation()
         }
+        
         let latitude:CLLocationDegrees = (locationManager.location?.coordinate.latitude)!
         let longitude:CLLocationDegrees = (locationManager.location?.coordinate.longitude)!
         let latDelta:CLLocationDegrees = 0.05
@@ -59,7 +59,6 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         removeAnnotation()
         latCenter = String(mapView.centerCoordinate.latitude)
         lngCenter = String(mapView.centerCoordinate.longitude)
-        self.listTest.removeAll()
         choiceDataToLoadWhenUSerChangeRegion(list: listCheckBox, data: dataRecevie, lat: latCenter, lng: lngCenter)
         print("USER STOP MOVING \(countRegionChange)")
         countRegionChange = countRegionChange + 1 // done
@@ -89,10 +88,10 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
             mapsToShow.showsScale = true
             mapsToShow.showsUserLocation = true
             let location = CLLocationCoordinate2D(latitude: Double(value.lat)!, longitude: Double(value.lng)!)
-            let annotation = MKPointAnnotation()
-            annotation.title = value.name
-            annotation.subtitle = value.address
-            annotation.coordinate = location
+            let imageData = UIImageView()
+            let annotation = ArrayLocation(coordinate: location, title: value.name, subtitle: value.address, url: value.urlImage)
+            annotation.image = UIImage(imageData.downLoadFromUrlDemoSimple(urlSimple: value.urlImage))
+            print(value.urlImage)
             self.mapsToShow.addAnnotation(annotation)
         }
     }
@@ -100,6 +99,7 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         let reuseId = "pin"
         var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
+        
         if !(annotation is MKUserLocation) {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
             let rightButton = UIButton(type: .detailDisclosure)
@@ -109,11 +109,8 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
             pinView?.animatesDrop = true
             pinView?.canShowCallout = true
             pinView?.rightCalloutAccessoryView = rightButton            
-            for urlValue in listTest[0..<listTest.count] {
-                urlShow = urlValue.urlImage
-                print(urlShow)
-            }
-            imageView.image = UIImage(imageView.downLoadFromUrlDemoSimple(urlSimple: urlShow))
+            let imageInArrayUrlAnnotation = annotation as! ArrayLocation
+            imageView.image = UIImage(imageView.downLoadFromUrlDemoSimple(urlSimple: imageInArrayUrlAnnotation.url!))
             pinView?.leftCalloutAccessoryView = imageView
             return pinView
         }
@@ -169,12 +166,7 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         }
         
         getDataAlamofireClosureView(url: urlString) { (listData, successData, errorData) in
-            self.listTest = listData
-            print("Result")
-            print(successData)
-            print(errorData)
-            print(self.listTest.count)
-            self.showNearLocationAlamoClosure(dataArray: self.listTest)
+            self.showNearLocationAlamoClosure(dataArray: listData)
         }
     }
 
@@ -194,7 +186,6 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         removeAnnotation()
         switch data {
         case 0:
-            
             tailOfUrl = "&radius=\(dataRadius)&type=restaurant&key=AIzaSyCGqb3PPJHUacR5SywBgNUQPbaHaSoMqUk"
         case 1:
             tailOfUrl = "&radius=\(dataRadius)&type=hospital&key=AIzaSyCGqb3PPJHUacR5SywBgNUQPbaHaSoMqUk"
@@ -216,12 +207,7 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         urlString = headOfUrl + locationOfUrl + tailOfUrl
         print(urlString)
         getDataAlamofireClosureView(url: urlString) { (listData, successData, errorData) in
-            self.listTest = listData
-            print(successData)
-            print(errorData)
-            print("Region change")
-            print(self.listTest.count)
-            self.showNearLocationAlamoClosure(dataArray: self.listTest)
+            self.showNearLocationAlamoClosure(dataArray: listData)
         }
     }
     
