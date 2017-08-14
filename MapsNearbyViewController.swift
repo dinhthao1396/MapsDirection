@@ -63,7 +63,9 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
         print("USER STOP MOVING \(countRegionChange)")
         countRegionChange = countRegionChange + 1 // done
     }
-    
+    func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
+        removeAnnotation()
+    }
     func removeAnnotation(){
         let annotationsToRemove = mapsToShow.annotations.filter { $0 !== mapsToShow.userLocation }
         mapsToShow.removeAnnotations( annotationsToRemove )
