@@ -33,6 +33,11 @@ class ListTypeTableViewController: UITableViewController, UITextFieldDelegate {
         choiceRadius()
     }
     
+    @IBAction func logOutButtonItem(_ sender: UIButton) {
+        performSegue(withIdentifier: "logOut", sender: self)
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         listTypeView.delegate = self
@@ -54,6 +59,9 @@ class ListTypeTableViewController: UITableViewController, UITextFieldDelegate {
         listType.append(element7)
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Show", style: .plain, target: self, action: #selector(ListTypeTableViewController.showChoice))
+//        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Out", style: .plain, target: self, action: #selector(ListTypeTableViewController.logOutAccount))
+//        self.navigationController?.popToRootViewController(animated: true)
+//        self.navigationItem.hidesBackButton = true
         
         textFieldRadius.clearsOnBeginEditing = true
         listTypeView.keyboardDismissMode = .onDrag
@@ -64,17 +72,20 @@ class ListTypeTableViewController: UITableViewController, UITextFieldDelegate {
         
         textFieldRadius.resignFirstResponder()
         textFieldRadius.clearsOnBeginEditing = true
-
-        let hideKeyboard = UITapGestureRecognizer(target: self, action: #selector(ListTypeTableViewController.navigationBarTap))
-        hideKeyboard.numberOfTapsRequired = 1
-        navigationController?.navigationBar.addGestureRecognizer(hideKeyboard)  // back button lowly
         
+        // hide keyboard when user tap on screen
+        
+//        let hideKeyboard = UITapGestureRecognizer(target: self, action:  #selector(ListTypeTableViewController.navigationBarTap))
+//        hideKeyboard.numberOfTapsRequired = 1
+//        navigationController?.navigationBar.addGestureRecognizer(hideKeyboard)  // back button lowly
+         // end
     
         
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         //testPost()
     }
+    
     
     func testPost(){
         let parameters: [String: Any] = [
@@ -103,10 +114,12 @@ class ListTypeTableViewController: UITableViewController, UITextFieldDelegate {
                 print(response.result.value!)
         }
     }
-    func navigationBarTap(_ recognizer: UIGestureRecognizer) {
-        textFieldRadius.endEditing(true)
-    }
+    // hide keyboard when user tap on screen
+//    func navigationBarTap(_ recognizer: UIGestureRecognizer) {
+//        textFieldRadius.endEditing(true)
+//    }
     
+       // end
 //    func dismissKeyboard(_ recognizer: UIGestureRecognizer) {
 //        
 //        textFieldRadius.endEditing(true)

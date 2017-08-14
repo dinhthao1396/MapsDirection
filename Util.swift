@@ -23,6 +23,19 @@ extension UIImageView {
     }
 }
  
+ extension UIViewController {
+    func hideKeyboardWhenTappedAroundInView() {
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UITableViewController.dismissKeyboardInView))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    func dismissKeyboardInView(sender: UITapGestureRecognizer? = nil) {
+        view.endEditing(true)
+    }
+    
+ }
+ 
  extension UITableViewController {
     func hideKeyboardWhenTappedAround() {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UITableViewController.dismissKeyboard))

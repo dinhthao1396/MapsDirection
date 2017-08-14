@@ -31,6 +31,8 @@
 		186286A41F3AFA8300BF5C7C /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 186286951F3AFA7900BF5C7C /* Alamofire.framework */; };
 		186286A51F3AFA8A00BF5C7C /* Alamofire.framework in Copy Framework */ = {isa = PBXBuildFile; fileRef = 186286951F3AFA7900BF5C7C /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		186539E51F3C4AB600327E98 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186539E41F3C4AB600327E98 /* FirstViewController.swift */; };
+		186539EA1F3C6E7C00327E98 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186539E91F3C6E7C00327E98 /* LoginViewController.swift */; };
+		186539F31F3C6F6600327E98 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186539F21F3C6F6600327E98 /* RegisterViewController.swift */; };
 		1882DD691F33030600919655 /* ShowDetailInMapsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1882DD681F33030600919655 /* ShowDetailInMapsTableViewController.swift */; };
 		1882DD721F33098D00919655 /* ShowDetailInMapsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1882DD711F33098D00919655 /* ShowDetailInMapsTableViewCell.swift */; };
 		1882DD741F3310B000919655 /* ModelToShowMoreDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1882DD731F3310B000919655 /* ModelToShowMoreDetail.swift */; };
@@ -43,6 +45,7 @@
 		1899DC6D1F2A3DF300FA4F14 /* ListDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1899DC6C1F2A3DF300FA4F14 /* ListDetailModel.swift */; };
 		1899DC6F1F2A7AB300FA4F14 /* MapsNearbyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1899DC6E1F2A7AB300FA4F14 /* MapsNearbyViewController.swift */; };
 		18B8057E1F3870CB00AC0530 /* ModelLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18B8057D1F3870CB00AC0530 /* ModelLocation.swift */; };
+		18F774841F417ABF001BC8E2 /* UserInformations.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 18F774821F417ABF001BC8E2 /* UserInformations.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -163,6 +166,8 @@
 		1851A5701F29A2E9007DD7BE /* ModelOfDirec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelOfDirec.swift; sourceTree = "<group>"; };
 		186286891F3AFA7900BF5C7C /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
 		186539E41F3C4AB600327E98 /* FirstViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
+		186539E91F3C6E7C00327E98 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		186539F21F3C6F6600327E98 /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		1882DD681F33030600919655 /* ShowDetailInMapsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShowDetailInMapsTableViewController.swift; sourceTree = "<group>"; };
 		1882DD711F33098D00919655 /* ShowDetailInMapsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShowDetailInMapsTableViewCell.swift; sourceTree = "<group>"; };
 		1882DD731F3310B000919655 /* ModelToShowMoreDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelToShowMoreDetail.swift; sourceTree = "<group>"; };
@@ -175,6 +180,7 @@
 		1899DC6C1F2A3DF300FA4F14 /* ListDetailModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListDetailModel.swift; sourceTree = "<group>"; };
 		1899DC6E1F2A7AB300FA4F14 /* MapsNearbyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapsNearbyViewController.swift; sourceTree = "<group>"; };
 		18B8057D1F3870CB00AC0530 /* ModelLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelLocation.swift; sourceTree = "<group>"; };
+		18F774831F417ABF001BC8E2 /* UserInformations.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UserInformations.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -255,6 +261,7 @@
 				181342281F286EBB0064CFE5 /* Assets.xcassets */,
 				1813422A1F286EBB0064CFE5 /* LaunchScreen.storyboard */,
 				1813422D1F286EBB0064CFE5 /* Info.plist */,
+				18F774821F417ABF001BC8E2 /* UserInformations.xcdatamodeld */,
 			);
 			path = MapsDemo;
 			sourceTree = "<group>";
@@ -286,6 +293,8 @@
 				1899DC6E1F2A7AB300FA4F14 /* MapsNearbyViewController.swift */,
 				1882DD681F33030600919655 /* ShowDetailInMapsTableViewController.swift */,
 				186539E41F3C4AB600327E98 /* FirstViewController.swift */,
+				186539E91F3C6E7C00327E98 /* LoginViewController.swift */,
+				186539F21F3C6F6600327E98 /* RegisterViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -562,6 +571,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				186539EA1F3C6E7C00327E98 /* LoginViewController.swift in Sources */,
 				186539E51F3C4AB600327E98 /* FirstViewController.swift in Sources */,
 				1851A55E1F299C1F007DD7BE /* Encoder.swift in Sources */,
 				181342241F286EBB0064CFE5 /* DirectionViewController.swift in Sources */,
@@ -585,10 +595,12 @@
 				1899DC671F2A3B7000FA4F14 /* ListTypeModel.swift in Sources */,
 				1899DC691F2A3D6600FA4F14 /* ListDetailTableViewController.swift in Sources */,
 				1851A5611F299C1F007DD7BE /* ExtensionDictionary.swift in Sources */,
+				18F774841F417ABF001BC8E2 /* UserInformations.xcdatamodeld in Sources */,
 				1899DC6B1F2A3D8800FA4F14 /* ListDetalCellTableViewCell.swift in Sources */,
 				1851A5641F299C1F007DD7BE /* Operators.swift in Sources */,
 				1882DD741F3310B000919655 /* ModelToShowMoreDetail.swift in Sources */,
 				1899DC6D1F2A3DF300FA4F14 /* ListDetailModel.swift in Sources */,
+				186539F31F3C6F6600327E98 /* RegisterViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -860,6 +872,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		18F774821F417ABF001BC8E2 /* UserInformations.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				18F774831F417ABF001BC8E2 /* UserInformations.xcdatamodel */,
+			);
+			currentVersion = 18F774831F417ABF001BC8E2 /* UserInformations.xcdatamodel */;
+			name = UserInformations.xcdatamodeld;
+			path = ../UserInformations.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 181342161F286EBB0064CFE5 /* Project object */;
 }
