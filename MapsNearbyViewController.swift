@@ -163,6 +163,10 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
             urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=atm&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
         case 6:
             urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=gas_station&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+        case 7:
+            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=bus_station&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+        case 8:
+            urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=bus_station&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
         default:
             urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=restaurant&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
         }
@@ -201,6 +205,10 @@ class MapsNearbyViewController: UIViewController, MKMapViewDelegate, CLLocationM
             tailOfUrl = "&radius=\(dataRadius)&type=atm&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
         case 6:
             tailOfUrl = "&radius=\(dataRadius)&type=gas_station&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+        case 7:
+            tailOfUrl = "&radius=\(dataRadius)&type=bus_station&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+        case 8:
+            tailOfUrl = "&radius=\(dataRadius)&type=church&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
         default:
             tailOfUrl = "&radius=\(dataRadius)&type=restaurant&key=AIzaSyCGqb3PPJHUacR5SywBgNUQPbaHaSoMqUk"
         }

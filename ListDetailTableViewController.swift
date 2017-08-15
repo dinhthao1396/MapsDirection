@@ -59,8 +59,12 @@ class ListDetailTableViewController: UITableViewController {
                 urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=atm&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
             case 6:
                 urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=gas_station&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+            case 7:
+                urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=bus_station&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+            case 8:
+                urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=church&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
             default:
-                urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=restaurant&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
+                urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7657374,106.67110279999997&radius=\(dataRadius)&type=church&key=AIzaSyAIi4TJkiMAfZR3vUk_mptHDbB2QQboEAg"
             }
         print(urlString)
         getDataAlamofireClosure(url: urlString) { (listData, succesDara, errorData ) in

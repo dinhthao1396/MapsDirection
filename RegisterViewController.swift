@@ -20,7 +20,6 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
     @IBAction func registerButton(_ sender: Any) {
         checkTextFieldIsEmpty()
         checkPassWord()
-        
     }
 
     override func viewDidLoad() {
@@ -35,6 +34,7 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
     override func viewWillAppear(_ animated: Bool) {
         fetchData()
     }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -54,49 +54,72 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
         let secondPass = self.secondPassTextFeld.text
         let userName = self.userNameTextField.text
         var flag = 0
+        var flagIsNum = 0
+        var flagIsStringUpper = 0
+        if ((userName?.characters.count)! < 6){
+            showAlertWarning(title: "User name incorrect", content: "User name must be at least 6 characters")
+        }
+        
+        if (firstPass != secondPass){
+            showAlertWarning(title: "Your passwords don't match", content: "Enter your password carefully")
+        }
+        
+        if ((firstPass?.characters.count)! < 8 || (secondPass?.characters.count)! < 8){
+           showAlertWarning(title: "Password incorrect", content: "Your password must be at least 8 characters")
+        }
+        
+        if userName == firstPass {
+            showAlertWarning(title: "OMG!!!", content: "User name and password need different")
+        }
+        
+        if (firstPass! == secondPass! && (userName?.characters.count)! >= 6 && (firstPass?.characters.count)! >= 8 && (secondPass?.characters.count)! >= 8) {
+            for isNum in secondPass!.characters{
+                let char = "\(isNum)"
+                if let numberInPass = Int(char){
+                    flagIsNum = flagIsNum + 1
+                    print("\(numberInPass) is number")
+                }else{
+                    if char == char.uppercased(){
+                        print("\(char) in hoa")
+                        flagIsStringUpper = flagIsStringUpper + 1
+                    }
+                    else{
+                        print("\(char) in thuong")
+                    }
+                }
+            }
+        }
+    
         for value in items[0..<items.count] {
             if value.name == userName! {
                 flag = flag + 1
             }
         }
         
-        if ((userName?.characters.count)! < 6){
-            showAlertWarning(title: "User name incorrect", content: "User name must be at least 6 characters")
-        }
-        if (firstPass != secondPass){
-            showAlertWarning(title: "Your passwords don't match", content: "Enter your password carefully")
-        }
-        if ((firstPass?.characters.count)! < 8 || (secondPass?.characters.count)! < 8){
-            showAlertWarning(title: "Password incorrect", content: "Your password must be at least 8 characters")
-        }
-        if userName == firstPass {
-            showAlertWarning(title: "OMG!!!", content: "User name and password need different")
-        }
-        if (firstPass! == secondPass! && (userName?.characters.count)! >= 6 && (firstPass?.characters.count)! >= 8 && (secondPass?.characters.count)! >= 8 && flag >= 1) {
+        if (firstPass! == secondPass! && (userName?.characters.count)! >= 6 && (firstPass?.characters.count)! >= 8 && (secondPass?.characters.count)! >= 8 && flag >= 1 ) {
             showAlertWarning(title: "OPPS!!!", content: "User name have been exist \n Please choice another name")
-            print("Tai khoan co roi")
         }
-        if (firstPass! == secondPass! && (userName?.characters.count)! >= 6 && (firstPass?.characters.count)! >= 8 && (secondPass?.characters.count)! >= 8 && flag == 0) {
-                    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-                    let newUser = UserInformations(context: context)
-                    newUser.name = userName
-                    newUser.pass = firstPass
-                    (UIApplication.shared.delegate as! AppDelegate).saveContext()
-                    dismiss(animated: true, completion: nil )
-            
-                            //showWhenUserTapRegisterButton(title: "Are you sure register with your information")
-                            
-            
-            // call some func to register
-            
+        if (firstPass! == secondPass! && (userName?.characters.count)! >= 6 && (firstPass?.characters.count)! >= 8 && (secondPass?.characters.count)! >= 8 && flag == 0 && flagIsNum == 0 && flagIsNum < (firstPass?.characters.count)!)  {
+            showAlertWarning(title: "NUMBER", content: "Your pass need to have a number")
+        }
+        
+        if (firstPass! == secondPass! && (userName?.characters.count)! >= 6 && (firstPass?.characters.count)! >= 8 && (secondPass?.characters.count)! >= 8 && flag == 0 && flagIsNum > 0 && flagIsNum < (firstPass?.characters.count)! && flagIsStringUpper == 0)  {
+            showAlertWarning(title: "OMG!!!", content: "Your pass need to have word upper")
+        }
+        
+        if (firstPass! == secondPass! && (userName?.characters.count)! >= 6 && (firstPass?.characters.count)! >= 8 && (secondPass?.characters.count)! >= 8 && flag == 0 && flagIsNum > 0 && flagIsNum < (firstPass?.characters.count)! && flagIsStringUpper > 0) {
+            let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+            let newUser = UserInformations(context: context)
+            newUser.name = userName
+            newUser.pass = firstPass
+            (UIApplication.shared.delegate as! AppDelegate).saveContext()
+            showWhenUserTapRegisterButton(title: "Are you sure register with your information")
         }
     }
     
     func fetchData() {
-        
         do {
             items = try context.fetch(UserInformations.fetchRequest())
-            //filteredData = items
             DispatchQueue.main.async {
                 self.view.reloadInputViews()
             }
@@ -104,7 +127,6 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
             print("Couldn't Fetch Data")
             print("Maybe No data to fetch")
         }
-        
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -118,7 +140,6 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
             print("User Click Ok To Enter Again")
         }))
         self.present(alert, animated:  true, completion: nil)
-        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

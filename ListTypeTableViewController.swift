@@ -57,7 +57,10 @@ class ListTypeTableViewController: UITableViewController, UITextFieldDelegate {
         listType.append(element6)
         let element7 = ListTypeModel(name: "Gas Station", value: 6)
         listType.append(element7)
-        
+        let element8 = ListTypeModel(name: "Bus Station", value: 7)
+        listType.append(element8)
+        let element9 = ListTypeModel(name: "Church", value: 8)
+        listType.append(element9)
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Show", style: .plain, target: self, action: #selector(ListTypeTableViewController.showChoice))
 //        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Out", style: .plain, target: self, action: #selector(ListTypeTableViewController.logOutAccount))
 //        self.navigationController?.popToRootViewController(animated: true)
